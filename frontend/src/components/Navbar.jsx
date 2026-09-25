@@ -43,29 +43,74 @@ function LinkedinIcon({ size = 15 }) {
   );
 }
 
-export default function Navbar() {
+export default function Navbar({ onNavigate, currentView = 'home' }) {
   const [isHovered, setIsHovered] = useState(false);
+
+  const handleNavClick = (view, anchor) => {
+    if (onNavigate) {
+      onNavigate(view);
+    }
+    if (view === 'home' && anchor) {
+      setTimeout(() => {
+        const el = document.querySelector(anchor);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 50);
+    }
+  };
 
   return (
     <header className="site-header">
       <div className="navbar-container">
         {/* Left: Brand Logo & Company Name */}
-        <div className="nav-brand">
+        <div
+          className="nav-brand"
+          onClick={() => handleNavClick('home', '#hero')}
+          style={{ cursor: 'pointer' }}
+        >
           <span className="brand-dot" aria-hidden="true"></span>
           <span className="brand-name">Foss Club</span>
         </div>
 
         {/* Center: Navigation Links */}
         <nav className="nav-center" aria-label="Main Navigation">
-          <a href="#about" className="nav-link" onClick={(e) => e.preventDefault()}>
+          <a
+            href="#about"
+            className={`nav-link ${currentView === 'home' ? '' : ''}`}
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavClick('home', '#about');
+            }}
+          >
             About
           </a>
-          <a href="#events" className="nav-link" onClick={(e) => e.preventDefault()}>
-            Events
+          <a
+            href="#leads"
+            className="nav-link"
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavClick('home', '#leads');
+            }}
+          >
+            Leads
           </a>
-          <a href="#placements" className="nav-link" onClick={(e) => e.preventDefault()}>
+          <a
+            href="#forge"
+            className="nav-link"
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavClick('home', '#forge');
+            }}
+          >
+            Forge
+          </a>
+          <button
+            type="button"
+            className={`nav-link ${currentView === 'placements' ? 'is-active-nav' : ''}`}
+            onClick={() => handleNavClick('placements')}
+            style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+          >
             Placements
-          </a>
+          </button>
         </nav>
 
         {/* Right: Explore button with popping social buttons toward the left */}
