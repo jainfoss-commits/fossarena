@@ -44,7 +44,7 @@ function LinkedinIcon({ size = 15 }) {
   );
 }
 
-export default function Navbar({ isVisible = true, onOpenJoinModal }) {
+export default function Navbar({ onNavigate, currentView = 'home' }) {
   const [isHovered, setIsHovered] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -71,47 +71,71 @@ export default function Navbar({ isVisible = true, onOpenJoinModal }) {
     }
   };
 
+  const handleNavClick = (view, anchor) => {
+    if (onNavigate) {
+      onNavigate(view);
+    }
+    if (view === 'home' && anchor) {
+      setTimeout(() => {
+        const el = document.querySelector(anchor);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 50);
+    }
+  };
+
   return (
     <header className={`site-header ${isVisible ? 'header-visible' : 'header-hidden'}`}>
       <div className="navbar-container">
-        {/* Left: Brand Logo & Club Name */}
+        {/* Left: Brand Logo & Company Name */}
         <div
           className="nav-brand"
+          onClick={() => handleNavClick('home', '#hero')}
           style={{ cursor: 'pointer' }}
-          onClick={(e) => handleNavClick(e, 'hero')}
-          title="FOSS Club Home"
         >
-          <img
-            src="/foss-logo.svg"
-            alt="FOSS Club Logo"
-            className="brand-logo"
-            draggable="false"
-          />
+          <span className="brand-dot" aria-hidden="true"></span>
           <span className="brand-name">Foss Club</span>
         </div>
 
         {/* Center: Navigation Links */}
         <nav className="nav-center" aria-label="Main Navigation">
           <a
-            href="#hero"
-            className="nav-link"
-            onClick={(e) => handleNavClick(e, 'hero')}
+            href="#about"
+            className={`nav-link ${currentView === 'home' ? '' : ''}`}
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavClick('home', '#about');
+            }}
           >
             About
           </a>
-          <Link
-            to="/events"
-            className={`nav-link ${location.pathname === '/events' ? 'active-nav-link' : ''}`}
-          >
-            Events
-          </Link>
           <a
-            href="#placements"
+            href="#leads"
             className="nav-link"
-            onClick={(e) => handleNavClick(e, 'placements')}
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavClick('home', '#leads');
+            }}
+          >
+            Leads
+          </a>
+          <a
+            href="#forge"
+            className="nav-link"
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavClick('home', '#forge');
+            }}
+          >
+            Forge
+          </a>
+          <button
+            type="button"
+            className={`nav-link ${currentView === 'placements' ? 'is-active-nav' : ''}`}
+            onClick={() => handleNavClick('placements')}
+            style={{ background: 'none', border: 'none', cursor: 'pointer' }}
           >
             Placements
-          </a>
+          </button>
         </nav>
 
         {/* Right: Actions Group & Explore */}
