@@ -1,0 +1,110 @@
+/* FossEcosystem.css - Slow Rotating Community Constellation Ball */
+
+.community-ball-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 520px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1200px;
+  user-select: none;
+  isolation: isolate;
+  background: radial-gradient(circle at 50% 50%, #150f1a 0%, #0a070e 70%, #050407 100%);
+  border-radius: 24px;
+  border: 1px solid rgba(168, 85, 247, 0.18);
+  box-shadow: 
+    0 24px 60px rgba(0, 0, 0, 0.75),
+    0 0 50px rgba(168, 85, 247, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  padding: 24px;
+}
+
+/* 2.5D Parallax Interactive Stage */
+.community-ball-stage {
+  position: relative;
+  width: 100%;
+  max-width: 540px;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+/* Background Soft Atmosphere Glow */
+.ball-ambient-halo {
+  position: absolute;
+  width: 90%;
+  height: 90%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(236, 72, 153, 0.12) 0%,
+    rgba(168, 85, 247, 0.09) 35%,
+    rgba(56, 189, 248, 0.04) 60%,
+    transparent 80%
+  );
+  filter: blur(40px);
+  pointer-events: none;
+  z-index: 0;
+  animation: halo-breathe 8s ease-in-out infinite alternate;
+}
+
+@keyframes halo-breathe {
+  0% { transform: scale(0.92); opacity: 0.7; }
+  100% { transform: scale(1.08); opacity: 1; }
+}
+
+/* SVG Constellation Canvas */
+.constellation-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Continuous Slow Rotation of Ball & Profiles ────────────────────────── */
+.constellation-rotating-core {
+  transform-origin: 250px 250px;
+  animation: constellation-spin 85s linear infinite;
+}
+
+@keyframes constellation-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Counter-rotate each avatar so faces stay right-side-up while slowly orbiting! */
+.avatar-node-item {
+  animation: avatar-counter-spin 85s linear infinite;
+  transition: filter 0.25s ease;
+}
+
+@keyframes avatar-counter-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+.avatar-node-item:hover {
+  filter: drop-shadow(0 0 14px rgba(56, 189, 248, 0.85));
+}
+
+.avatar-image-disc {
+  transition: opacity 0.2s ease;
+}
+
+/* Dashed Arcs Layer */
+.orbital-arcs-layer {
+  filter: drop-shadow(0 0 4px rgba(168, 85, 247, 0.35));
+}
+
+@media (max-width: 640px) {
+  .community-ball-wrapper {
+    min-height: 440px;
+    padding: 16px;
+  }
+}

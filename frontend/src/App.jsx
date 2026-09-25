@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import ThreeMotionCanvas from './components/ThreeMotionCanvas';
+import ParticleLoader, { hasLoaderRun } from './components/ParticleLoader';
+import FossEcosystem from './components/FossEcosystem';
 import SmoothTextWriter from './components/SmoothTextWriter';
 import AboutSection from './components/AboutSection';
 import TeamSection from './components/TeamSection';
@@ -14,6 +16,13 @@ import {
   Send,
   CheckCircle2,
   ExternalLink,
+  Code2,
+  GitPullRequest,
+  Users,
+  Clock,
+  MapPin,
+  Trophy,
+  Award,
 } from 'lucide-react';
 import './App.css';
 
@@ -94,13 +103,13 @@ export default function App() {
       {/* ─── Hero Section with Three.js & Smooth Text Animation ────────────── */}
       <section className="motion-hero-section" id="hero">
         {/* Three.js 3D Interactive WebGL Background */}
-        <ThreeMotionCanvas onOpeningComplete={() => setHeroReady(true)} />
+        <ThreeMotionCanvas onOpeningComplete={loaderDone ? onOpeningComplete : undefined} />
 
         {/* Ambient Overlay Vignette & Depth Mask */}
         <div className={`hero-depth-vignette ${heroReady ? 'elem-fade-in' : 'elem-hidden'}`} />
 
         <div className="hero-content-wrapper">
-          <div className="hero-text-grid">
+          <div className="hero-split-grid">
             {/* Left: Smooth Text Animation & CTAs */}
             <div className={`hero-left-column ${heroReady ? 'hero-ready-in' : 'hero-waiting'}`}>
               <SmoothTextWriter shouldStart={heroReady} />
@@ -121,6 +130,11 @@ export default function App() {
                   <span>Join The Guild</span>
                 </button>
               </div>
+            </div>
+
+            {/* Right: Ecosystem spinning slowly, replacing the ball */}
+            <div className={`hero-ecosystem-column ${heroReady ? 'hero-ready-in' : 'hero-waiting'}`}>
+              <FossEcosystem />
             </div>
           </div>
         </div>
@@ -181,13 +195,13 @@ export default function App() {
         </footer>
       </div>
 
-      {/* ─── Join Guild Interactive Modal ─────────────────────────────────── */}
+      {/* ─── Join The Guild Modal Dialog ──────────────────────────────────── */}
       {isJoinModalOpen && (
-        <div className="modal-backdrop-wrap" onClick={() => setIsJoinModalOpen(false)}>
-          <div className="modal-glass-container" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-backdrop" onClick={() => setIsJoinModalOpen(false)}>
+          <div className="modal-glass-box" onClick={(e) => e.stopPropagation()}>
             <button
               type="button"
-              className="modal-close-button"
+              className="modal-close-btn"
               onClick={() => setIsJoinModalOpen(false)}
               aria-label="Close"
             >
@@ -277,6 +291,61 @@ export default function App() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+// ─── Main App with Universal Navbar & React Router DOM ──────────────────────
+export default function App() {
+  const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
+  const [isSiteLoaded, setIsSiteLoaded] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // On hard reload, redirect to '/' so the loader + hero always play first.
+  // We use performance.getEntriesByType (Navigation Timing API) to detect
+  // a true page reload vs SPA route change. Unlike sessionStorage, this is
+  // reliable: it resets every time the browser fetches the page.
+  useEffect(() => {
+    const navEntry = performance.getEntriesByType('navigation')[0];
+    const navType  = navEntry?.type; // 'navigate' | 'reload' | 'back_forward'
+    const isReload = navType === 'reload';
+    const isFreshNav = navType === 'navigate';
+
+    // On reload OR on first direct-URL navigation to a non-home route: redirect home
+    if ((isReload || isFreshNav) && location.pathname !== '/') {
+      navigate('/', { replace: true });
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleOpeningComplete = () => {
+    setIsSiteLoaded(true);
+  };
+
+  const isNavbarVisible = isSiteLoaded || location.pathname !== '/';
+
+  return (
+    <div className="app-root-shell">
+      {/* Universal Navigation Bar: kept in every section & route */}
+      <Navbar
+        isVisible={isNavbarVisible}
+        onOpenJoinModal={() => setIsJoinModalOpen(true)}
+      />
+
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <HomePage
+              isSiteLoaded={isSiteLoaded}
+              onOpeningComplete={handleOpeningComplete}
+              isJoinModalOpen={isJoinModalOpen}
+              setIsJoinModalOpen={setIsJoinModalOpen}
+            />
+          }
+        />
+        <Route path="/events" element={<EventsPage />} />
+      </Routes>
     </div>
   );
 }
