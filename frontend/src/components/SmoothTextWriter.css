@@ -1,0 +1,218 @@
+/* SmoothTextWriter.css - High-end typography & kinetic text reveal */
+
+.smooth-text-writer-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+  z-index: 10;
+  max-width: 680px;
+}
+
+/* ─── Eyebrow Badge ──────────────────────────────────────────────────────── */
+.writer-eyebrow-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 5px 14px;
+  border-radius: 9999px;
+  background: rgba(14, 22, 38, 0.7);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  margin-bottom: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+  animation: fadeInDown 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.eyebrow-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 10px #38bdf8, 0 0 20px rgba(56, 189, 248, 0.6);
+  animation: radarPulse 2s infinite ease-in-out;
+}
+
+@keyframes radarPulse {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.35); opacity: 1; box-shadow: 0 0 16px #38bdf8; }
+}
+
+.eyebrow-text {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  font-family: 'Inter', monospace, sans-serif;
+}
+
+.eyebrow-version {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  font-family: monospace;
+  font-weight: 600;
+}
+
+/* ─── Main Title: FOSS CLUB ──────────────────────────────────────────────── */
+.foss-club-headline-container {
+  position: relative;
+  margin-bottom: 18px;
+}
+
+.foss-club-title {
+  font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(52px, 8.5vw, 92px);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  user-select: none;
+}
+
+.foss-title-space {
+  display: inline-block;
+  width: clamp(14px, 2.5vw, 28px);
+}
+
+/* Each animated letter */
+.foss-letter {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  transform-origin: center bottom;
+  transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+              filter 0.35s ease,
+              opacity 0.35s ease;
+}
+
+.foss-letter.letter-hidden {
+  opacity: 0;
+  filter: blur(14px);
+  transform: translateY(22px) scale(0.9);
+}
+
+.foss-letter.letter-visible {
+  opacity: 1;
+  filter: blur(0px);
+  transform: translateY(0) scale(1);
+}
+
+.letter-inner {
+  display: inline-block;
+  background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 40%, #7dd3fc 75%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 10px 30px rgba(56, 189, 248, 0.25);
+  position: relative;
+  z-index: 2;
+}
+
+.letter-glow-layer {
+  position: absolute;
+  inset: 0;
+  color: #38bdf8;
+  opacity: 0;
+  filter: blur(12px);
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.3s ease;
+}
+
+/* Hover micro-interaction on individual letters */
+.foss-letter:hover,
+.foss-letter.letter-hovered {
+  transform: translateY(-8px) scale(1.1);
+}
+
+.foss-letter:hover .letter-glow-layer,
+.foss-letter.letter-hovered .letter-glow-layer {
+  opacity: 0.85;
+}
+
+.foss-letter:hover .letter-inner,
+.foss-letter.letter-hovered .letter-inner {
+  background: linear-gradient(135deg, #ffffff 0%, #38bdf8 50%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ─── Cursor Indicator ────────────────────────────────────────────────────── */
+.writer-cursor {
+  display: inline-block;
+  width: clamp(4px, 0.7vw, 7px);
+  height: clamp(44px, 7vw, 76px);
+  background: #38bdf8;
+  border-radius: 4px;
+  margin-left: 10px;
+  box-shadow: 0 0 14px #38bdf8, 0 0 28px rgba(56, 189, 248, 0.6);
+  vertical-align: middle;
+}
+
+.cursor-typing {
+  animation: cursorBlink 0.75s infinite steps(2);
+}
+
+.cursor-breathe {
+  animation: cursorPulse 2.2s infinite ease-in-out;
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes cursorPulse {
+  0%, 100% { opacity: 0.85; transform: scaleY(1); }
+  50% { opacity: 0.25; transform: scaleY(0.85); box-shadow: 0 0 6px #38bdf8; }
+}
+
+/* ─── Secondary Subhead Fade In ───────────────────────────────────────────── */
+.writer-subtitle-wrap {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.writer-subtitle-wrap.subtitle-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.writer-tagline {
+  font-size: clamp(22px, 3.2vw, 32px);
+  font-weight: 400;
+  line-height: 1.25;
+  color: #cbd5e1;
+  margin-bottom: 14px;
+  letter-spacing: -0.015em;
+}
+
+.gradient-highlight {
+  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 500;
+}
+
+.writer-description {
+  font-size: clamp(14px, 1.8vw, 16px);
+  line-height: 1.68;
+  color: #94a3b8;
+  max-width: 560px;
+  margin: 0;
+  font-weight: 350;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}

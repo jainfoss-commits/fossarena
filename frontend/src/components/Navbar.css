@@ -1,0 +1,258 @@
+/* Minimalist Dark Theme Navbar inspired by reference */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: #090b10;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Full width spanning extreme corners */
+.navbar-container {
+  width: 100%;
+  max-width: 100%;
+  padding: 16px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Left: Extreme left brand */
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  z-index: 2;
+}
+
+/* Clean, crisp red dot matching inspiration */
+.brand-dot {
+  width: 22px;
+  height: 22px;
+  background-color: #ef4444;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.nav-brand:hover .brand-dot {
+  transform: scale(1.06);
+  opacity: 0.95;
+}
+
+/* Lighter, minimal font */
+.brand-name {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  color: #f8fafc;
+}
+
+/* Center: Exactly centered in the viewport */
+.nav-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+
+/* Light, minimal navigation links */
+.nav-link {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 0.01em;
+  color: #94a3b8;
+  text-decoration: none;
+  padding: 6px 0;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: #f8fafc;
+}
+
+/* Right: Extreme right actions group */
+.nav-right {
+  display: flex;
+  align-items: center;
+  z-index: 2;
+}
+
+.explore-action-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  padding: 4px 0 4px 12px;
+}
+
+/* Social icon buttons popped out to the left */
+.social-popover {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(12px) scale(0.9);
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.25s;
+}
+
+.explore-action-group:hover .social-popover,
+.explore-action-group.is-active .social-popover {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(0) scale(1);
+}
+
+/* Social Icon Buttons */
+.social-icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #121620;
+  color: #94a3b8;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.social-icon-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+}
+
+.social-icon-btn.instagram-btn:hover {
+  color: #fb7185;
+  border-color: rgba(251, 113, 133, 0.45);
+  background-color: #1a1724;
+  box-shadow: 0 0 14px rgba(225, 48, 108, 0.3);
+}
+
+.social-icon-btn.linkedin-btn:hover {
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.45);
+  background-color: #121c2c;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.3);
+}
+
+.social-icon-btn:active {
+  transform: scale(0.95);
+}
+
+/* Enhanced Explore Pill Button */
+.nav-explore-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 20px;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #161b26 0%, #10141d 100%);
+  color: #f1f5f9;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 13.5px;
+  font-weight: 400;
+  letter-spacing: 0.015em;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-explore-btn .btn-icon {
+  color: #94a3b8;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.25s ease;
+}
+
+.explore-action-group:hover .nav-explore-btn,
+.nav-explore-btn:hover {
+  background: linear-gradient(180deg, #1c2230 0%, #141924 100%);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45), 0 0 15px rgba(56, 189, 248, 0.1);
+}
+
+.explore-action-group:hover .nav-explore-btn .btn-icon,
+.nav-explore-btn:hover .btn-icon {
+  color: #38bdf8;
+  transform: rotate(90deg);
+}
+
+.nav-explore-btn:active {
+  transform: scale(0.98);
+}
+
+/* Responsive adjustments */
+@media (max-width: 840px) {
+  .navbar-container {
+    padding: 14px 20px;
+  }
+
+  .nav-center {
+    position: static;
+    transform: none;
+    gap: 20px;
+  }
+
+  .nav-link {
+    font-size: 13.5px;
+  }
+}
+
+@media (max-width: 600px) {
+  .navbar-container {
+    padding: 12px 16px;
+  }
+
+  .brand-name {
+    font-size: 15px;
+  }
+
+  .brand-dot {
+    width: 18px;
+    height: 18px;
+  }
+
+  .nav-center {
+    gap: 14px;
+  }
+
+  .nav-link {
+    font-size: 12.5px;
+  }
+
+  .nav-explore-btn {
+    padding: 6px 14px;
+    font-size: 12.5px;
+  }
+
+  .social-icon-btn {
+    width: 28px;
+    height: 28px;
+  }
+}
