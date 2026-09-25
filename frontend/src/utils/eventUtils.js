@@ -424,7 +424,7 @@ export const DEFAULT_EVENTS = [
     id: "event-dip23-induction-sep2023",
     title: "DIP’23 – Departmental Induction Program 2023",
     description: "DIP’23 (Departmental Induction Program 2023) was an interactive, high-energy orientation event orchestrated by the FOSS Club to welcome incoming software engineering undergraduates. The program broke down traditional classroom barriers, initiating freshers into the collaborative, hacker-friendly, and peer-driven culture of the department.",
-    image_url: "/events/04_DIP23_Induction_Sep2023/photo_01.png",
+    image_url: "/events/04_DIP23_Induction_Sep2023/photo_06.jpeg",
     date: "2023-09-02",
     end_date: "2023-09-02",
     status: "Past",
@@ -442,7 +442,7 @@ export const DEFAULT_EVENTS = [
     objectives: ["Seamlessly integrate new students into the departmental ecosystem, labs, and student club activities.", "Encourage lateral thinking, spontaneous problem solving, and cross-team communication through gamified drills.", "Introduce student mentors, faculty advisors, and executive office-bearers of the FOSS Club.", "Build lasting camaraderie and mutual trust among batchmates from day one."],
     outcomes: "60 new entrants developed immediate rapport with peers and senior mentors, establishing an active network of study groups and enthusiastically signing up for future technical workshops.",
     highlights: ["• Winning Team (DIP’23 Overall Championship): Subhajith Talukdar, Kannudhalan, Eklavaya Shah, Baba Kshitiji, Ayush Raj, Navya Krishna\n• Simon Says Reflex Champion: Pratik"],
-    photos: ["/events/04_DIP23_Induction_Sep2023/photo_01.png", "/events/04_DIP23_Induction_Sep2023/photo_02.png", "/events/04_DIP23_Induction_Sep2023/photo_03.jpeg", "/events/04_DIP23_Induction_Sep2023/photo_04.jpeg", "/events/04_DIP23_Induction_Sep2023/photo_05.jpeg", "/events/04_DIP23_Induction_Sep2023/photo_06.jpeg", "/events/04_DIP23_Induction_Sep2023/photo_07.jpeg"]
+    photos: ["/events/04_DIP23_Induction_Sep2023/photo_06.jpeg", "/events/04_DIP23_Induction_Sep2023/photo_07.jpeg", "/events/04_DIP23_Induction_Sep2023/photo_04.jpeg", "/events/04_DIP23_Induction_Sep2023/photo_03.jpeg", "/events/04_DIP23_Induction_Sep2023/photo_05.jpeg", "/events/04_DIP23_Induction_Sep2023/photo_02.png"]
   },
   {
     id: "event-project-expo-jun2023",
@@ -666,6 +666,6 @@ export function enrichEventForDisplay(event, index) {
     accentColor: accent.color,
     glowColor: accent.glow,
     fallbackImage: accent.fallbackImg,
-    staggerY: isOdd ? "54px" : "0px",
+    staggerY: isOdd ? "24px" : "0px",
   };
 }

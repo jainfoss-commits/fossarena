@@ -81,7 +81,12 @@ export default function Navbar({ isVisible = true, onOpenJoinModal }) {
           onClick={(e) => handleNavClick(e, 'hero')}
           title="FOSS Club Home"
         >
-          <span className="brand-dot" aria-hidden="true"></span>
+          <img
+            src="/foss-logo.svg"
+            alt="FOSS Club Logo"
+            className="brand-logo"
+            draggable="false"
+          />
           <span className="brand-name">Foss Club</span>
         </div>
 

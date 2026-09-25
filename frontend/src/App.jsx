@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Routes, Route, Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, Link, useLocation, useNavigate, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import ThreeMotionCanvas from './components/ThreeMotionCanvas';
+import ParticleLoader, { hasLoaderRun } from './components/ParticleLoader';
 import FossEcosystem from './components/FossEcosystem';
 import SmoothTextWriter from './components/SmoothTextWriter';
 import MotionCard from './components/MotionCard';
@@ -34,10 +35,25 @@ import './App.css';
 
 // ─── Homepage Component ───────────────────────────────────────────────────────
 function HomePage({ isSiteLoaded, onOpeningComplete, isJoinModalOpen, setIsJoinModalOpen }) {
-  const [joinSubmitted, setJoinSubmitted] = useState(false);
-  const [selectedRole, setSelectedRole] = useState('developer');
-  const [homeEventTab, setHomeEventTab] = useState('upcoming'); // 'upcoming' | 'past'
+  const [joinSubmitted, setJoinSubmitted]   = useState(false);
+  const [selectedRole, setSelectedRole]     = useState('developer');
+  const [homeEventTab, setHomeEventTab]     = useState('upcoming');
+  // Use module-level flag: true only after loader has run in this JS context
+  // (resets on hard reload because the module is re-executed)
+  const [loaderDone, setLoaderDone] = useState(() => hasLoaderRun());
   const heroReady = isSiteLoaded;
+
+  // If loader already ran (SPA nav back to home), fire onOpeningComplete immediately
+  useEffect(() => {
+    if (loaderDone && !isSiteLoaded) {
+      onOpeningComplete();
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleLoaderComplete = () => {
+    setLoaderDone(true);
+    onOpeningComplete();
+  };
 
   const handleJoinSubmit = (e) => {
     e.preventDefault();
@@ -50,10 +66,13 @@ function HomePage({ isSiteLoaded, onOpeningComplete, isJoinModalOpen, setIsJoinM
 
   return (
     <div className={`app-motion-layout ${heroReady ? 'page-ready' : 'page-loading'}`}>
+      {/* Particle Collector Loading Screen */}
+      {!loaderDone && <ParticleLoader onComplete={handleLoaderComplete} />}
+
       {/* ─── Hero Section with Three.js & Smooth Text Animation ────────────── */}
       <section className="motion-hero-section" id="hero">
         {/* Three.js 3D Interactive WebGL Background */}
-        <ThreeMotionCanvas onOpeningComplete={onOpeningComplete} />
+        <ThreeMotionCanvas onOpeningComplete={loaderDone ? onOpeningComplete : undefined} />
 
         {/* Ambient Overlay Vignette & Depth Mask */}
         <div className={`hero-depth-vignette ${heroReady ? 'elem-fade-in' : 'elem-hidden'}`} />
@@ -642,6 +661,23 @@ export default function App() {
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
   const [isSiteLoaded, setIsSiteLoaded] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  // On hard reload, redirect to '/' so the loader + hero always play first.
+  // We use performance.getEntriesByType (Navigation Timing API) to detect
+  // a true page reload vs SPA route change. Unlike sessionStorage, this is
+  // reliable: it resets every time the browser fetches the page.
+  useEffect(() => {
+    const navEntry = performance.getEntriesByType('navigation')[0];
+    const navType  = navEntry?.type; // 'navigate' | 'reload' | 'back_forward'
+    const isReload = navType === 'reload';
+    const isFreshNav = navType === 'navigate';
+
+    // On reload OR on first direct-URL navigation to a non-home route: redirect home
+    if ((isReload || isFreshNav) && location.pathname !== '/') {
+      navigate('/', { replace: true });
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleOpeningComplete = () => {
     setIsSiteLoaded(true);
