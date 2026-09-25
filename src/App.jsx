@@ -10,6 +10,7 @@ import TeamSection from './components/TeamSection';
 import KineticManifesto from './components/KineticManifesto';
 import PlacementsDirectory from './components/PlacementsDirectory';
 import EventsPage from './pages/EventsPage';
+import GlassCardDemo from './components/ui/demo';
 import {
   ArrowRight,
   Terminal,
@@ -213,6 +214,7 @@ export default function App() {
         } />
         <Route path="/events" element={<EventsPage />} />
         <Route path="/placements" element={<PlacementsDirectory onBackToHome={() => navigate('/')} />} />
+        <Route path="/demo" element={<GlassCardDemo />} />
       </Routes>
     </div>
   );
