@@ -68,11 +68,6 @@ export default function TeamSection() {
       <div className="section-container">
         {/* Section Header */}
         <div className="team-header-centered">
-          <div className="team-badge-pill">
-            <span className="team-badge-dot" />
-            <span>OPERATIVES // LEADERSHIP PROTOCOL</span>
-          </div>
-
           <h2 className="team-heading">
             Meet the <span className="text-gradient-cyan">Guild Leads</span>
           </h2>

@@ -18,7 +18,9 @@
   flex-direction: row;
   min-height: 520px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  background-color: #0a0a0a;
+  background-color: rgba(10, 14, 22, 0.75);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
 }
 

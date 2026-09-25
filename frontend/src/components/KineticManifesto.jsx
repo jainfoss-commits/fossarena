@@ -33,11 +33,6 @@ export default function KineticManifesto() {
 
       <div className="manifesto-container">
         <div className="manifesto-header">
-          <div className="manifesto-badge">
-            <span className="manifesto-badge-dot" />
-            <span>04 // KINETIC ETHOS</span>
-          </div>
-
           <h2 className="manifesto-title">
             Values in Motion. <span className="text-gradient-cyan">Isometric Reality.</span>
           </h2>

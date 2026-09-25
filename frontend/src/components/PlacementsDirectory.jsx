@@ -120,11 +120,6 @@ export default function PlacementsDirectory({ onBackToHome }) {
 
         {/* Directory Hero Banner */}
         <div className="placements-hero-header">
-          <div className="placements-badge">
-            <span className="badge-dot" />
-            <span>{placementsData.header.badge}</span>
-          </div>
-
           <h1 className="placements-page-title">
             {placementsData.header.title}
           </h1>

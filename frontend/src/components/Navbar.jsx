@@ -44,13 +44,13 @@ function LinkedinIcon({ size = 15 }) {
   );
 }
 
-export default function Navbar({ onNavigate, currentView = 'home' }) {
+export default function Navbar({ isVisible = true, onOpenJoinModal }) {
   const [isHovered, setIsHovered] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
   const handleNavClick = (e, targetId) => {
-    e.preventDefault();
+    if (e && e.preventDefault) e.preventDefault();
     if (location.pathname === '/') {
       const el = document.getElementById(targetId);
       if (el) {
@@ -71,76 +71,53 @@ export default function Navbar({ onNavigate, currentView = 'home' }) {
     }
   };
 
-  const handleNavClick = (view, anchor) => {
-    if (onNavigate) {
-      onNavigate(view);
-    }
-    if (view === 'home' && anchor) {
-      setTimeout(() => {
-        const el = document.querySelector(anchor);
-        if (el) el.scrollIntoView({ behavior: 'smooth' });
-      }, 50);
-    }
-  };
-
   return (
     <header className={`site-header ${isVisible ? 'header-visible' : 'header-hidden'}`}>
       <div className="navbar-container">
         {/* Left: Brand Logo & Company Name */}
         <div
           className="nav-brand"
-          onClick={() => handleNavClick('home', '#hero')}
+          onClick={(e) => handleNavClick(e, 'hero')}
           style={{ cursor: 'pointer' }}
+          title="FOSS Club Home"
         >
-          <span className="brand-dot" aria-hidden="true"></span>
-          <span className="brand-name">Foss Club</span>
+          <img
+            src="/foss-logo.svg"
+            alt="FOSS Club Logo"
+            className="brand-logo"
+            draggable="false"
+          />
+          <div className="brand-name-stack">
+            <span className="brand-foss">Foss</span>
+            <span className="brand-club">Club</span>
+          </div>
         </div>
 
         {/* Center: Navigation Links */}
         <nav className="nav-center" aria-label="Main Navigation">
           <a
             href="#about"
-            className={`nav-link ${currentView === 'home' ? '' : ''}`}
-            onClick={(e) => {
-              e.preventDefault();
-              handleNavClick('home', '#about');
-            }}
+            className="nav-link"
+            onClick={(e) => handleNavClick(e, 'about')}
           >
             About
           </a>
-          <a
-            href="#leads"
-            className="nav-link"
-            onClick={(e) => {
-              e.preventDefault();
-              handleNavClick('home', '#leads');
-            }}
+          <Link
+            to="/events"
+            className={`nav-link ${location.pathname === '/events' ? 'active-nav-link' : ''}`}
           >
-            Leads
-          </a>
-          <a
-            href="#forge"
-            className="nav-link"
-            onClick={(e) => {
-              e.preventDefault();
-              handleNavClick('home', '#forge');
-            }}
-          >
-            Forge
-          </a>
-          <button
-            type="button"
-            className={`nav-link ${currentView === 'placements' ? 'is-active-nav' : ''}`}
-            onClick={() => handleNavClick('placements')}
-            style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+            Events
+          </Link>
+          <Link
+            to="/placements"
+            className={`nav-link ${location.pathname === '/placements' ? 'active-nav-link' : ''}`}
           >
             Placements
-          </button>
+          </Link>
         </nav>
 
         {/* Right: Actions Group & Explore */}
         <div className="nav-right">
-
           <div
             className={`explore-action-group ${isHovered ? 'is-active' : ''}`}
             onMouseEnter={() => setIsHovered(true)}
@@ -174,7 +151,7 @@ export default function Navbar({ onNavigate, currentView = 'home' }) {
             <button
               type="button"
               className="nav-explore-btn"
-              onClick={(e) => handleNavClick(e, 'domains')}
+              onClick={(e) => handleNavClick(e, 'about')}
               aria-label="Explore"
             >
               <Compass size={15} className="btn-icon" />

@@ -23,11 +23,6 @@ export default function AboutSection() {
         {/* Left Column: Understated Editorial Typography & Specs */}
         <div className="about-text">
           <div className="about-text-top">
-            <div className="about-editorial-tag">
-              <span className="editorial-tag-num">[ 01 ]</span>
-              <span className="editorial-tag-label">COMMUNITY MANIFESTO</span>
-            </div>
-
             <h2 className="about-heading">
               About <span className="heading-highlight">FOSS Club</span>
             </h2>

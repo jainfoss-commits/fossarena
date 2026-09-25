@@ -2,11 +2,8 @@
 
 .manifesto-section {
   position: relative;
-  padding: 6rem 1.5rem 7rem;
-  background: radial-gradient(circle at 50% 30%, rgba(56, 189, 248, 0.05) 0%, transparent 60%),
-              linear-gradient(180deg, rgba(10, 12, 16, 0.4) 0%, #0a0c10 100%);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 3rem 1.5rem 5rem;
+  background: radial-gradient(ellipse 70% 45% at 50% 10%, rgba(56, 189, 248, 0.05) 0%, transparent 70%);
   overflow: hidden;
 }
 

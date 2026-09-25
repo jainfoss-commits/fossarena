@@ -92,11 +92,6 @@ export function FeatureCarousel() {
           <div className="rail-fade-top absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-[#0a0f18] to-transparent z-40" />
           <div className="rail-fade-bottom absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#0a0f18] to-transparent z-40" />
 
-          <div className="rail-badge mb-6 flex items-center gap-2 text-[11px] font-mono uppercase tracking-[0.2em] text-cyan-400/80 z-20">
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-            Core Tracks &amp; Ethos
-          </div>
-
           <div className="rail-track relative w-full h-full flex items-center justify-start z-20">
             {FEATURES.map((feature, index) => {
               const distance = index - currentIndex;

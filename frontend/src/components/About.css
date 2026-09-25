@@ -9,10 +9,10 @@
   position: relative;
   max-width: 1300px;
   margin: 0 auto;
-  padding: 5rem 2rem 5.5rem;
+  padding: 4.5rem 2rem 3rem;
   display: flex;
   flex-direction: column;
-  gap: 4rem;
+  gap: 3rem;
   scroll-margin-top: 80px;
 }
 
