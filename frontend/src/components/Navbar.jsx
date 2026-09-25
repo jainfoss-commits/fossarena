@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { Compass } from 'lucide-react';
 import './Navbar.css';
 
@@ -43,33 +44,74 @@ function LinkedinIcon({ size = 15 }) {
   );
 }
 
-export default function Navbar() {
+export default function Navbar({ isVisible = true, onOpenJoinModal }) {
   const [isHovered, setIsHovered] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleNavClick = (e, targetId) => {
+    e.preventDefault();
+    if (location.pathname === '/') {
+      const el = document.getElementById(targetId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    } else {
+      navigate('/');
+      setTimeout(() => {
+        const el = document.getElementById(targetId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }, 150);
+    }
+  };
 
   return (
-    <header className="site-header">
+    <header className={`site-header ${isVisible ? 'header-visible' : 'header-hidden'}`}>
       <div className="navbar-container">
-        {/* Left: Brand Logo & Company Name */}
-        <div className="nav-brand">
+        {/* Left: Brand Logo & Club Name */}
+        <div
+          className="nav-brand"
+          style={{ cursor: 'pointer' }}
+          onClick={(e) => handleNavClick(e, 'hero')}
+          title="FOSS Club Home"
+        >
           <span className="brand-dot" aria-hidden="true"></span>
           <span className="brand-name">Foss Club</span>
         </div>
 
         {/* Center: Navigation Links */}
         <nav className="nav-center" aria-label="Main Navigation">
-          <a href="#about" className="nav-link" onClick={(e) => e.preventDefault()}>
+          <a
+            href="#hero"
+            className="nav-link"
+            onClick={(e) => handleNavClick(e, 'hero')}
+          >
             About
           </a>
-          <a href="#events" className="nav-link" onClick={(e) => e.preventDefault()}>
+          <Link
+            to="/events"
+            className={`nav-link ${location.pathname === '/events' ? 'active-nav-link' : ''}`}
+          >
             Events
-          </a>
-          <a href="#placements" className="nav-link" onClick={(e) => e.preventDefault()}>
+          </Link>
+          <a
+            href="#placements"
+            className="nav-link"
+            onClick={(e) => handleNavClick(e, 'placements')}
+          >
             Placements
           </a>
         </nav>
 
-        {/* Right: Explore button with popping social buttons toward the left */}
+        {/* Right: Actions Group & Explore */}
         <div className="nav-right">
+
           <div
             className={`explore-action-group ${isHovered ? 'is-active' : ''}`}
             onMouseEnter={() => setIsHovered(true)}
@@ -77,31 +119,33 @@ export default function Navbar() {
           >
             {/* Popped out social icon buttons toward the left */}
             <div className="social-popover" aria-hidden={!isHovered}>
-              <button
-                type="button"
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noreferrer"
                 className="social-icon-btn instagram-btn"
                 aria-label="Instagram"
                 title="Instagram"
-                onClick={(e) => e.preventDefault()}
               >
                 <InstagramIcon size={14} />
-              </button>
-              <button
-                type="button"
+              </a>
+              <a
+                href="https://linkedin.com"
+                target="_blank"
+                rel="noreferrer"
                 className="social-icon-btn linkedin-btn"
                 aria-label="LinkedIn"
                 title="LinkedIn"
-                onClick={(e) => e.preventDefault()}
               >
                 <LinkedinIcon size={14} />
-              </button>
+              </a>
             </div>
 
             {/* Explore Pill Button */}
             <button
               type="button"
               className="nav-explore-btn"
-              onClick={(e) => e.preventDefault()}
+              onClick={(e) => handleNavClick(e, 'domains')}
               aria-label="Explore"
             >
               <Compass size={15} className="btn-icon" />
