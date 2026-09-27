@@ -225,7 +225,7 @@ export const clubLeads = [
   },
   {
     id: "secretary",
-    name: "[Aparna Dhiraj]",
+    name: "Aparna Dhiraj",
     role: "Secretary",
     bio: "Managing operational logistics, records, and guild governance.\nKeeping sprints, documentation, and campus administration organized.",
     accent: "#f59e0b",
