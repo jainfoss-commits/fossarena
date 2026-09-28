@@ -2,8 +2,12 @@ import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 /**
- * Three.js Interactive Hero Background — wave particle lattice + starfield.
- * No loading phase here; that is handled by ParticleLoader.
+ * Three.js Interactive Background — wave particle lattice + starfield.
+ * Scroll-driven reactions are intentionally subtle:
+ *   - Gentle lattice tilt + wave speed change
+ *   - Camera slow drift upward
+ *   - Starfield slow roll + brightness boost
+ * Everything stays legible and structured at all scroll positions.
  */
 
 export default function ThreeMotionCanvas({ onOpeningComplete }) {
@@ -13,10 +17,9 @@ export default function ThreeMotionCanvas({ onOpeningComplete }) {
     const container = mountRef.current;
     if (!container) return;
 
-    // Signal hero content can show (ParticleLoader already done by now)
     if (onOpeningComplete) onOpeningComplete();
 
-    // ─── Scene & Camera ────────────────────────────────────────────────────
+    // ─── Scene & Camera ─────────────────────────────────────────────────────
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x05070c, 0.0016);
 
@@ -40,7 +43,7 @@ export default function ThreeMotionCanvas({ onOpeningComplete }) {
     renderer.toneMappingExposure = 1.35;
     container.appendChild(renderer.domElement);
 
-    // ─── Lighting ──────────────────────────────────────────────────────────
+    // ─── Lighting ───────────────────────────────────────────────────────────
     scene.add(new THREE.AmbientLight(0x0d1527, 3.2));
     const cyanLight = new THREE.PointLight(0x38bdf8, 4.8, 95, 1.2);
     cyanLight.position.set(18, 16, 24);
@@ -49,7 +52,7 @@ export default function ThreeMotionCanvas({ onOpeningComplete }) {
     violetLight.position.set(-18, -8, 20);
     scene.add(violetLight);
 
-    // ─── Particle glow texture ─────────────────────────────────────────────
+    // ─── Particle glow texture ──────────────────────────────────────────────
     const mkTex = () => {
       const c = document.createElement('canvas');
       c.width = c.height = 64;
@@ -68,23 +71,33 @@ export default function ThreeMotionCanvas({ onOpeningComplete }) {
     const colIndigo = new THREE.Color(0x818cf8);
     const colWhite  = new THREE.Color(0xf0f9ff);
 
-    // ─── Wave particle lattice ─────────────────────────────────────────────
+    // ─── Wave particle lattice ──────────────────────────────────────────────
     const GX = 84, GZ = 84, SP = 1.6;
     const NPTS = GX * GZ;
     const gPos = new Float32Array(NPTS * 3);
     const gCol = new Float32Array(NPTS * 3);
 
+    // Store base XZ so we can reuse them without drift
+    const baseX = new Float32Array(NPTS);
+    const baseZ = new Float32Array(NPTS);
+
     for (let i = 0; i < GX; i++) {
       for (let j = 0; j < GZ; j++) {
-        const idx = (i * GZ + j) * 3;
-        const x = (i - GX / 2) * SP;
-        const z = (j - GZ / 2) * SP - 6;
-        gPos[idx] = x; gPos[idx + 1] = 0; gPos[idx + 2] = z;
+        const flat = i * GZ + j;
+        const x    = (i - GX / 2) * SP;
+        const z    = (j - GZ / 2) * SP - 6;
+        baseX[flat] = x;
+        baseZ[flat] = z;
+        gPos[flat * 3]     = x;
+        gPos[flat * 3 + 1] = 0;
+        gPos[flat * 3 + 2] = z;
 
         const dist = Math.sqrt(x * x + z * z) / 50;
         const col  = colCyan.clone().lerp(colIndigo, Math.min(1, dist));
         if (Math.random() > 0.94) col.lerp(colWhite, 0.75);
-        gCol[idx] = col.r; gCol[idx + 1] = col.g; gCol[idx + 2] = col.b;
+        gCol[flat * 3]     = col.r;
+        gCol[flat * 3 + 1] = col.g;
+        gCol[flat * 3 + 2] = col.b;
       }
     }
 
@@ -102,7 +115,7 @@ export default function ThreeMotionCanvas({ onOpeningComplete }) {
     waveGrid.rotation.x = 0.26;
     scene.add(waveGrid);
 
-    // ─── Ambient starfield ─────────────────────────────────────────────────
+    // ─── Ambient starfield ──────────────────────────────────────────────────
     const SCNT = 340;
     const sPos  = new Float32Array(SCNT * 3);
     const sCols = new Float32Array(SCNT * 3);
@@ -124,7 +137,15 @@ export default function ThreeMotionCanvas({ onOpeningComplete }) {
     const starField = new THREE.Points(sGeo, sMat);
     scene.add(starField);
 
-    // ─── Mouse parallax ────────────────────────────────────────────────────
+    // ─── Scroll tracking ─────────────────────────────────────────────────────
+    // Track raw scrollY pixels — used directly to drive mesh rotation.
+    const scroll = { raw: 0, smooth: 0 };
+    const onScroll = () => {
+      scroll.raw = window.scrollY;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // ─── Mouse parallax ─────────────────────────────────────────────────────
     const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
     const onMove = (e) => {
       const r = container.getBoundingClientRect();
@@ -140,7 +161,13 @@ export default function ThreeMotionCanvas({ onOpeningComplete }) {
     };
     window.addEventListener('resize', onResize);
 
-    // ─── Animation loop ────────────────────────────────────────────────────
+    // ─── Helpers ────────────────────────────────────────────────────────────
+    const lerp = (a, b, t) => a + (b - a) * t;
+    const clamp01 = (x) => Math.max(0, Math.min(1, x));
+    // Remap x from [inMin,inMax] → [0,1], clamped
+    const remap = (x, inMin, inMax) => clamp01((x - inMin) / (inMax - inMin));
+
+    // ─── Animation loop ──────────────────────────────────────────────────────
     let rafId;
     const clock = new THREE.Clock();
 
@@ -148,37 +175,76 @@ export default function ThreeMotionCanvas({ onOpeningComplete }) {
       rafId = requestAnimationFrame(animate);
       const el = clock.getElapsedTime();
 
-      // Mouse smooth lerp
+      // Smooth scroll (raw px)
+      scroll.smooth += (scroll.raw - scroll.smooth) * 0.06;
+      // Normalise to 0-1 for camera bands
+      const maxSc  = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      const st     = Math.min(1, scroll.smooth / maxSc);
+
+      // Scroll bands (0→1, smooth)
+      const aboutT = remap(st, 0.15, 0.50);
+      const deepT  = remap(st, 0.50, 0.85);
+
+      // ── Mouse lerp ────────────────────────────────────────────────────────
       mouse.x += (mouse.tx - mouse.x) * 0.045;
       mouse.y += (mouse.ty - mouse.y) * 0.045;
 
-      // Camera parallax drift
+      // ── Camera ────────────────────────────────────────────────────────────
+      // As user scrolls into About: camera gently rises (+3 units Y) and
+      // pulls back slightly (+4 units Z). Deep: rises a bit more.
+      const targetCamY = lerp(4.5, lerp(7.5, 9.5, deepT), aboutT);
+      const targetCamZ = lerp(42,  lerp(46,  50,   deepT), aboutT);
+
       camera.position.x += (mouse.x * 6.0 - camera.position.x) * 0.04;
-      camera.position.y += ((4.5 + mouse.y * 3.5) - camera.position.y) * 0.04;
+      camera.position.y += ((targetCamY + mouse.y * 3.5) - camera.position.y) * 0.04;
+      camera.position.z += (targetCamZ - camera.position.z) * 0.04;
       camera.lookAt(0, 0.5, 0);
 
-      // Wave lattice animation
+      // ── Wave grid: continuous Y-spin driven by scrollY ────────────────────
+      // 0.0008 rad/px → ~2.4 rad over a 3000px page. Very low, very smooth.
+      const targetRotY = scroll.smooth * 0.0008;
+      waveGrid.rotation.y += (targetRotY - waveGrid.rotation.y) * 0.05;
+
+      // Wave speed & amplitude scale with scroll
+      const speedMul = lerp(1.0, 1.55, aboutT);
+      const ampMul   = lerp(1.0, 1.40, aboutT);
+
       const posAttr = waveGeo.attributes.position;
       const arr     = posAttr.array;
+
       for (let i = 0; i < GX; i++) {
         for (let j = 0; j < GZ; j++) {
-          const idx = (i * GZ + j) * 3;
-          const x = arr[idx], z = arr[idx + 2];
-          const dx = x - mouse.x * 20;
-          const dz = z - (-mouse.y * 20);
+          const flat = i * GZ + j;
+          const idx  = flat * 3;
+          const bx   = baseX[flat];
+          const bz   = baseZ[flat];
+
+          // Keep XZ positions exactly at base — no stretching or warping
+          arr[idx]     = bx;
+          arr[idx + 2] = bz;
+
+          // Mouse ripple
+          const dx = bx - mouse.x * 20;
+          const dz = bz - (-mouse.y * 20);
           const dm = Math.sqrt(dx * dx + dz * dz);
           const mw = Math.sin(Math.max(0, 16 - dm) * 0.4 - el * 3) * 1.2;
-          arr[idx + 1] =
-            Math.sin(x * 0.14 + el * 1.3) * 2.2 +
-            Math.cos(z * 0.12 + el * 1.1) * 2.0 +
-            Math.sin((x + z) * 0.09 + el * 0.8) * 1.4 +
-            (dm < 16 ? mw : 0);
+
+          arr[idx + 1] = ampMul * (
+            Math.sin(bx * 0.14 + el * 1.3 * speedMul) * 2.2 +
+            Math.cos(bz * 0.12 + el * 1.1 * speedMul) * 2.0 +
+            Math.sin((bx + bz) * 0.09 + el * 0.8 * speedMul) * 1.4 +
+            (dm < 16 ? mw : 0)
+          );
         }
       }
       posAttr.needsUpdate = true;
 
-      starField.rotation.y = el * 0.02;
-      starField.rotation.x = Math.sin(el * 0.015) * 0.05;
+      // ── Starfield ─────────────────────────────────────────────────────────
+      // Gentle continuous spin, scroll adds a slow roll on X.
+      // Scale stays at 1 — no pulling inward.
+      starField.rotation.y = el * 0.02 + aboutT * 0.08;
+      starField.rotation.x = Math.sin(el * 0.015) * 0.05 + aboutT * 0.12;
+      sMat.opacity = lerp(0.65, 0.85, aboutT);
 
       renderer.render(scene, camera);
     };
@@ -189,6 +255,7 @@ export default function ThreeMotionCanvas({ onOpeningComplete }) {
       cancelAnimationFrame(rafId);
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('resize', onResize);
+      window.removeEventListener('scroll', onScroll);
       waveGeo.dispose(); waveMat.dispose();
       sGeo.dispose();    sMat.dispose();
       renderer.dispose();

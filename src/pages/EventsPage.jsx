@@ -441,34 +441,6 @@ export default function EventsPage() {
                               <p className="editorial-narrative">{item.description || item.desc}</p>
                             </header>
 
-                            {/* Minimalist Telemetry Row */}
-                            <dl className="editorial-telemetry-row">
-                              <div className="telemetry-cell">
-                                <dt className="telemetry-term">SCHEDULE DATE</dt>
-                                <dd className="telemetry-val">{item.date}</dd>
-                              </div>
-                              <div className="telemetry-cell">
-                                <dt className="telemetry-term">CAMPUS VENUE</dt>
-                                <dd className="telemetry-val">{item.venue || 'FET Campus Block'}</dd>
-                              </div>
-                              <div className="telemetry-cell">
-                                <dt className="telemetry-term">TIME WINDOW</dt>
-                                <dd className="telemetry-val">{item.time || '10:00 AM – 4:00 PM'}</dd>
-                              </div>
-                              <div className="telemetry-cell">
-                                <dt className="telemetry-term">ACADEMIC SCOPE</dt>
-                                <dd className="telemetry-val">{item.category}</dd>
-                              </div>
-                              <div className="telemetry-cell">
-                                <dt className="telemetry-term">DELIVERY FORMAT</dt>
-                                <dd className="telemetry-val">{item.mode || 'In-Person Workshop'}</dd>
-                              </div>
-                              <div className="telemetry-cell">
-                                <dt className="telemetry-term">ATTENDANCE LOG</dt>
-                                <dd className="telemetry-val">{item.attendance || `${item.participants_count || 120}+ Attended`}</dd>
-                              </div>
-                            </dl>
-
                             {/* ─── Photo Gallery (past events only) ─── */}
                             {item.status !== 'Upcoming' && galleryPhotos.length > 0 && (
                                 <section className="editorial-gallery-section">

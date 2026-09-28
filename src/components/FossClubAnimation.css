@@ -1,4 +1,4 @@
-/* FossClubAnimation.css - Cyber-Graffiti typography with GSAP interactive hover */
+/* FossClubAnimation.css — Editorial Split Typography */
 
 .cyber-graffiti-stage {
   position: relative;
@@ -7,28 +7,32 @@
   align-items: flex-start;
   justify-content: flex-start;
   width: 100%;
-  max-width: 100%;
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
-  padding: 6px 0 12px 0;
+  padding: 0;
   margin: 0;
   user-select: none;
-  isolation: isolate;
-  /* 100% Transparent backdrop - completely eliminates any rectangular container artifact */
+  /* NO isolation:isolate — it breaks -webkit-background-clip:text */
 }
 
+/* ── Title row: FOSS + divider + CLUB side by side ── */
 .graffiti-title-track {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: row;
+  align-items: flex-end;
   justify-content: flex-start;
   width: 100%;
   background: transparent;
-  /* Graffiti dynamic forward slant */
-  transform: skewX(-6deg);
-  line-height: 0.9;
-  gap: 0px;
+  gap: 0;
+  line-height: 1;
+}
+
+/* Word wrapper — overflow VISIBLE so hover scale/translate isn't clipped */
+.graffiti-word-clip {
+  overflow: visible;
+  display: inline-flex;
+  align-items: flex-end;
 }
 
 .graffiti-word {
@@ -37,38 +41,115 @@
   white-space: nowrap;
 }
 
-.graffiti-word.word-club {
-  margin-top: -0.06em;
+/* ── Vertical pipe divider between FOSS and CLUB ── */
+.graffiti-word-divider {
+  display: inline-block;
+  width: 3px;
+  height: 0.7em;
+  background: linear-gradient(180deg, #38bdf8 0%, #818cf8 100%);
+  border-radius: 2px;
+  margin: 0 18px 0.05em;
+  flex-shrink: 0;
+  align-self: center;
+  opacity: 0; /* animated in by GSAP */
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.7);
 }
 
-.graffiti-word-gap {
-  display: none;
-}
-
-/* Character hit area with 3D perspective */
+/* Character hit area — extra padding prevents visual clip on hover scale */
 .graffiti-char-wrapper {
   display: inline-block;
   perspective: 800px;
   position: relative;
-  padding: 4px 2px;
+  padding: 12px 4px;
   cursor: pointer;
+  overflow: visible;
 }
 
-/* Core Character Element (Animated by GSAP) */
-.graffiti-char-core {
+/* ── FOSS word: outlined / stroke style ── */
+.word-foss .graffiti-char-core {
   position: relative;
   display: inline-block;
-  font-family: 'Syne', 'Outfit', 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: clamp(36px, 5.8vw, 82px);
+  font-family: 'Space Grotesk', 'Outfit', -apple-system, sans-serif;
+  font-size: clamp(52px, 7.5vw, 108px);
   font-weight: 800;
-  line-height: 0.95;
+  line-height: 1;
   letter-spacing: -0.04em;
   text-transform: uppercase;
   transform-style: preserve-3d;
-  will-change: transform, opacity, filter;
+  will-change: transform, opacity;
+  background: transparent;
+  overflow: visible;
 }
 
-/* Layer 1: Chromatic Spray Offset (Active during entrance slam & GSAP hover) */
+.word-foss .graffiti-layer-fill {
+  position: relative;
+  display: block;
+  z-index: 2;
+  /* Ghost / outlined look: transparent fill, bright stroke */
+  color: transparent;
+  -webkit-text-stroke: 2.5px #ffffff;
+  background: none;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.18));
+  transition: filter 0.25s ease;
+}
+
+.word-foss .graffiti-char-wrapper:hover .graffiti-layer-fill {
+  -webkit-text-stroke-color: #38bdf8;
+  filter: drop-shadow(0 0 22px rgba(56, 189, 248, 0.65));
+}
+
+/* ── CLUB word: solid gradient fill ── */
+.word-club .graffiti-char-core {
+  position: relative;
+  display: inline-block;
+  font-family: 'Space Grotesk', 'Outfit', -apple-system, sans-serif;
+  font-size: clamp(52px, 7.5vw, 108px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+  background: transparent;
+  overflow: visible;
+}
+
+.word-club .graffiti-layer-fill {
+  position: relative;
+  display: block;
+  z-index: 2;
+  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 60%, #34d399 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+  filter: drop-shadow(0 2px 20px rgba(56, 189, 248, 0.45));
+  transition: filter 0.25s ease;
+}
+
+.word-club .graffiti-char-wrapper:hover .graffiti-layer-fill {
+  filter: drop-shadow(0 2px 30px rgba(56, 189, 248, 0.8)) brightness(1.1);
+}
+
+/* ── Shared block shadow layer ── */
+.graffiti-layer-block {
+  position: absolute;
+  inset: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: transparent;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* ── Chromatic aberration layer (hover only) ── */
 .graffiti-layer-chroma {
   position: absolute;
   inset: 0;
@@ -83,61 +164,20 @@
   pointer-events: none;
   z-index: 1;
   opacity: 0;
-  filter: blur(1.5px);
+  filter: blur(2px);
   will-change: transform, opacity;
   transform: translate(0, 0);
 }
 
-/* Layer 2: 3D Graffiti Block Drop Shadow */
-.graffiti-layer-block {
-  position: absolute;
-  inset: 0;
-  font-family: inherit;
-  font-size: inherit;
-  font-weight: inherit;
-  line-height: inherit;
-  letter-spacing: inherit;
-  text-transform: inherit;
-  color: #0c1938;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.65;
-  transform: translateZ(-10px);
-  text-shadow: 
-    1px 1px 0px #0284c7,
-    2px 2px 0px #0369a1,
-    3px 3px 0px #1e3a8a,
-    4px 4px 0px #0f172a,
-    6px 6px 14px rgba(0, 240, 255, 0.35);
-  will-change: transform, opacity;
-}
 
-/* Layer 3: Main Front Letter (Chrome / Electric Cyan / Mint Street Fill) */
-.graffiti-layer-fill {
-  position: relative;
-  display: block;
-  z-index: 2;
-  background: linear-gradient(
-    135deg,
-    #ffffff 0%,
-    #e0f2fe 25%,
-    #38bdf8 55%,
-    #34d399 82%,
-    #818cf8 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  /* Graffiti spray tag stroke outline */
-  -webkit-text-stroke: 1px rgba(56, 189, 248, 0.45);
-  filter: drop-shadow(0 2px 14px rgba(56, 189, 248, 0.4));
-  transition: filter 0.25s ease;
-}
 
-/* Reduced motion preference */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .graffiti-char-core {
     transform: none !important;
     opacity: 1 !important;
-    transition: none !important;
+  }
+  .graffiti-shimmer-line::after {
+    animation: none;
   }
 }

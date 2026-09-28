@@ -7,7 +7,6 @@
   position: relative;
   z-index: 10;
   width: 100%;
-  max-width: 780px;
 }
 
 /* ─── Eyebrow Badge ──────────────────────────────────────────────────────── */
@@ -62,7 +61,7 @@
 /* ─── Main Title: FOSS CLUB ──────────────────────────────────────────────── */
 .foss-club-headline-container {
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: 28px;
   width: 100%;
 }
 

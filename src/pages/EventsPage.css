@@ -2652,4 +2652,97 @@
   .rsvp-input-row {
     flex-direction: column;
   }
+
+  /* ── In-Stream Expanded Event Card Mobile Layout ── */
+  .chapter-column-card.is-card-expanded {
+    width: calc(100vw - 24px) !important;
+    min-width: calc(100vw - 24px) !important;
+    max-width: calc(100vw - 24px) !important;
+    margin: 0 auto !important;
+    position: relative !important;
+  }
+
+  .chapter-column-card.is-card-expanded .chapter-card-inner {
+    flex-direction: column !important;
+    height: auto !important;
+    max-height: 80vh !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    border-radius: 16px !important;
+  }
+
+  .chapter-column-card.is-card-expanded .chapter-art-frame {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    height: 180px !important;
+    min-height: 180px !important;
+    max-height: 180px !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+    flex-shrink: 0 !important;
+  }
+
+  .chapter-expanded-panel {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    overflow-y: visible !important;
+    flex: 1 1 auto !important;
+  }
+
+  .editorial-panel-scrollable {
+    padding: 20px 16px 28px !important;
+    overflow-y: visible !important;
+    gap: 16px !important;
+  }
+
+  .editorial-header {
+    padding-right: 36px !important;
+  }
+
+  .editorial-headline {
+    font-size: 1.35rem !important;
+    line-height: 1.25 !important;
+    margin: 0 !important;
+  }
+
+  .editorial-narrative {
+    font-size: 0.88rem !important;
+    line-height: 1.6 !important;
+  }
+
+  .editorial-telemetry-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    padding: 12px 10px !important;
+  }
+
+  .telemetry-cell {
+    padding: 8px 10px !important;
+  }
+
+  .telemetry-term {
+    font-size: 8.5px !important;
+  }
+
+  .telemetry-val {
+    font-size: 11px !important;
+  }
+
+  .expanded-panel-close-btn {
+    top: 10px !important;
+    right: 10px !important;
+    width: 36px !important;
+    height: 36px !important;
+    background: rgba(15, 23, 42, 0.92) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    z-index: 50 !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6) !important;
+  }
+
+  .expanded-art-collapse-hint {
+    display: none !important;
+  }
 }

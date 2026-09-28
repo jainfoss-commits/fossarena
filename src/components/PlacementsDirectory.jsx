@@ -1,388 +1,227 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
-  Search,
-  Download,
-  ArrowLeft,
-  Calendar,
-  MapPin,
-  GraduationCap,
-  Users,
-  AlertCircle,
-  ExternalLink,
-  X,
-  Sparkles,
+  Download, ArrowLeft, Calendar, MapPin,
+  GraduationCap, Users, Sparkles, TrendingUp, Building2, Zap,
 } from 'lucide-react';
 import { placementsData } from '../data/mockData';
 import './PlacementsDirectory.css';
 
+/* ── colour per company ────────────────────────────────────────────────────── */
+const COMPANY_COLORS = {
+  'IBM':                    { bg: '#1d4ed8', text: '#93c5fd' },
+  'Nvidia':                 { bg: '#16a34a', text: '#86efac' },
+  'Tata Elxsi':             { bg: '#7c3aed', text: '#c4b5fd' },
+  'Navikenz':               { bg: '#0891b2', text: '#67e8f9' },
+  'AnkerCloud Technologies':{ bg: '#b45309', text: '#fcd34d' },
+  'BNP Paribas':            { bg: '#be123c', text: '#fca5a5' },
+  'Prime Vector Pvt Ltd':   { bg: '#0f766e', text: '#5eead4' },
+  'Learning Routes':        { bg: '#9333ea', text: '#d8b4fe' },
+  'Tata Technologies':      { bg: '#c2410c', text: '#fdba74' },
+  'Xylem':                  { bg: '#1e40af', text: '#93c5fd' },
+};
+
+const ctcTier = (n) => {
+  if (n >= 10) return { label: 'DREAM',    color: '#38bdf8', bar: '#38bdf8' };
+  if (n >= 6)  return { label: 'TIER-1',   color: '#34d399', bar: '#34d399' };
+  return               { label: 'STANDARD', color: '#94a3b8', bar: '#64748b' };
+};
+
 export default function PlacementsDirectory({ onBackToHome }) {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [activeFilter, setActiveFilter] = useState('all');
-  const [selectedDrive, setSelectedDrive] = useState(null);
+  const [hoveredId,  setHoveredId]  = useState(null);
+  const timelineRef = useRef(null);
+  const fillRef     = useRef(null); // direct DOM — no setState = zero lag
 
-  // Filter drives based on search and category tab
-  const filteredDrives = useMemo(() => {
-    return placementsData.drives.filter((item) => {
-      // Academic pause items pass through unless specific filter is selected
-      if (item.isAcademicPause) {
-        return activeFilter === 'all';
-      }
+  /* ── Scroll progress: write directly to DOM, bypassing React render ── */
+  useEffect(() => {
+    const onScroll = () => {
+      const wrap = timelineRef.current;
+      const fill = fillRef.current;
+      if (!wrap || !fill) return;
+      const rect = wrap.getBoundingClientRect();
+      const winH = window.innerHeight;
+      // Start filling when the timeline begins entering the center-top of viewport
+      const startThreshold = winH * 0.65;
+      const totalHeight = wrap.offsetHeight;
+      const scrolled = startThreshold - rect.top;
+      const pct = Math.max(0, Math.min(1, scrolled / (totalHeight - winH * 0.35 || totalHeight)));
+      fill.style.height = `${pct * 100}%`;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    onScroll();
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, []);
 
-      // Category matching
-      if (activeFilter === 'dream' && item.ctcNum < 10) return false;
-      if (activeFilter === 'tier1' && (item.ctcNum < 6 || item.ctcNum > 9)) return false;
-      if (activeFilter === 'online' && item.type !== 'online') return false;
-      if (activeFilter === 'campus' && item.type !== 'campus') return false;
-
-      // Search matching
-      if (searchTerm.trim() !== '') {
-        const query = searchTerm.toLowerCase();
-        const matchCompany = item.company?.toLowerCase().includes(query);
-        const matchRole = item.role?.toLowerCase().includes(query);
-        const matchBranch = item.branches?.toLowerCase().includes(query);
-        const matchVenue = item.venueType?.toLowerCase().includes(query);
-        return matchCompany || matchRole || matchBranch || matchVenue;
-      }
-
-      return true;
-    });
-  }, [searchTerm, activeFilter]);
-
-  // Real CSV Export
   const handleExportCSV = () => {
-    const headers = [
-      'Company',
-      'Role',
-      'Annual CTC',
-      'Date',
-      'Assessment Venue',
-      'Eligible Branches',
-      'Applications',
-      'Status',
-    ];
-
+    const headers = ['Company','Role','Annual CTC','Date','Assessment Venue','Eligible Branches','Applications'];
     const rows = placementsData.drives
       .filter((d) => !d.isAcademicPause)
       .map((d) => [
-        `"${d.company}"`,
-        `"${d.role}"`,
-        `"${d.ctc}"`,
-        `"${d.date}"`,
-        `"${d.venueType}"`,
-        `"${d.branches}"`,
-        `"${d.applications}"`,
-        `"${d.status}"`,
+        `"${d.company}"`,`"${d.role}"`,`"${d.ctc}"`,`"${d.date}"`,
+        `"${d.venueType}"`,`"${d.branches}"`,`"${d.applications}"`,
       ]);
-
-    const csvContent =
-      'data:text/csv;charset=utf-8,' +
+    const csv = 'data:text/csv;charset=utf-8,' +
       [headers.join(','), ...rows.map((e) => e.join(','))].join('\n');
-
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute('download', 'placement_directory_batch_2027.csv');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const a = document.createElement('a');
+    a.href = encodeURI(csv);
+    a.download = 'placement_directory_batch_2027.csv';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
   };
 
   return (
-    <div className="placements-screen-layout">
-      <div className="section-container">
-        {/* Navigation & Header Bar */}
-        <div className="placements-nav-bar">
-          <button
-            type="button"
-            className="back-btn"
-            onClick={onBackToHome}
-          >
-            <ArrowLeft size={16} />
-            <span>Back to Hub</span>
+    <div className="pd-root">
+      {/* ── Background glow orbs ── */}
+      <div className="pd-orb pd-orb-1" />
+      <div className="pd-orb pd-orb-2" />
+
+      <div className="pd-inner">
+
+        {/* ── Top bar ── */}
+        <div className="pd-topbar">
+          <button type="button" className="pd-back-btn" onClick={onBackToHome}>
+            <ArrowLeft size={15} />
+            <span>Hub</span>
           </button>
-
-          <div className="header-actions">
-            <span className="window-month-tag">
-              <Calendar size={13} />
-              <span>{placementsData.header.month}</span>
+          <div className="pd-topbar-right">
+            <span className="pd-month-chip">
+              <Calendar size={12} />
+              {placementsData.header.month}
             </span>
-
-            <button
-              type="button"
-              className="export-csv-btn"
-              onClick={handleExportCSV}
-            >
-              <Download size={14} />
-              <span>Export CSV</span>
+            <button type="button" className="pd-export-btn" onClick={handleExportCSV}>
+              <Download size={13} />
+              Export CSV
             </button>
           </div>
         </div>
 
-        {/* Directory Hero Banner */}
-        <div className="placements-hero-header">
-          <h1 className="placements-page-title">
-            {placementsData.header.title}
+        {/* ── Hero ── */}
+        <div className="pd-hero">
+          <h1 className="pd-hero-title">
+            Placement<br />
+            <span className="pd-hero-title-accent">Directory</span>
           </h1>
-
-          <p className="placements-page-subtitle">
-            {placementsData.header.subtitle}
-          </p>
+          <p className="pd-hero-sub">{placementsData.header.subtitle}</p>
         </div>
 
-        {/* 4 Metrics Stats Row */}
-        <div className="placements-metrics-grid">
-          {placementsData.stats.map((st) => (
-            <div
-              key={st.label}
-              className={`metric-card ${st.highlight ? 'is-highlight' : ''}`}
-            >
-              <span className="metric-label">{st.label}</span>
-              <div className="metric-value-row">
-                <span className="metric-number">{st.value}</span>
-                {st.highlight && <Sparkles size={16} className="text-cyan" />}
+        {/* ── Stats row ── */}
+        <div className="pd-stats-row">
+          {placementsData.stats.map((st, i) => (
+            <div key={st.label} className={`pd-stat-card ${i === 0 ? 'pd-stat-highlight' : ''}`}>
+              <div className="pd-stat-icon">
+                {i === 0 ? <Sparkles size={16} /> : i === 1 ? <TrendingUp size={16} /> : i === 2 ? <Users size={16} /> : <Building2 size={16} />}
               </div>
-              <span className="metric-sub">{st.sub}</span>
+              <div className="pd-stat-body">
+                <span className="pd-stat-value">{st.value}</span>
+                <span className="pd-stat-label">{st.label}</span>
+                <span className="pd-stat-sub">{st.sub}</span>
+              </div>
+              {i === 0 && <div className="pd-stat-glow" />}
             </div>
           ))}
         </div>
 
-        {/* Search & Filter Tabs Controls */}
-        <div className="placements-controls-bar">
-          {/* Search Input */}
-          <div className="search-input-wrap">
-            <Search size={16} className="search-icon" />
-            <input
-              type="text"
-              placeholder="Search by company (IBM, Nvidia, BNP...), role, or branch..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="search-input"
-            />
-            {searchTerm && (
-              <button
-                type="button"
-                className="clear-search-btn"
-                onClick={() => setSearchTerm('')}
-              >
-                <X size={14} />
-              </button>
-            )}
+        {/* ── Timeline + progress bar ── */}
+        <div className="pd-timeline-wrap" ref={timelineRef}>
+          {/* Absolute progress track spans full section height */}
+          <div className="pd-progress-track">
+            <div ref={fillRef} className="pd-progress-fill" />
           </div>
 
-          {/* Filter Pills */}
-          <div className="filter-tabs-row">
-            {placementsData.filters.map((f) => (
-              <button
-                key={f.id}
-                type="button"
-                className={`filter-pill-btn ${activeFilter === f.id ? 'is-active' : ''}`}
-                onClick={() => setActiveFilter(f.id)}
-              >
-                {f.label}
-              </button>
-            ))}
-          </div>
-        </div>
+          {/* Drive list */}
+          <div className="pd-timeline">
+            {placementsData.drives.map((item) => {
 
-        {/* Academic Note Banner */}
-        <div className="academic-note-banner">
-          <div className="note-icon-col">
-            <AlertCircle size={20} className="text-amber" />
-          </div>
-          <div className="note-content-col">
-            <div className="note-title-line">
-              <span className="note-badge">{placementsData.academicNote.badge}</span>
-              <span className="note-title">{placementsData.academicNote.title}</span>
-            </div>
-            <p className="note-text">{placementsData.academicNote.description}</p>
-          </div>
-        </div>
-
-        {/* Drives Timeline Directory */}
-        <div className="drives-timeline-list">
-          {filteredDrives.map((item) => {
-            if (item.isAcademicPause) {
-              return (
-                <div key={item.id} className="academic-pause-card">
-                  <div className="pause-date-col">
-                    <span className="pause-date-badge">{item.date}</span>
-                  </div>
-                  <div className="pause-info-col">
-                    <div className="pause-title-line">
-                      <span className="pause-tag">{item.subtitle}</span>
-                      <h4 className="pause-heading">{item.title}</h4>
+              if (item.isAcademicPause) {
+                return (
+                  <div key={item.id} className="pd-pause-row">
+                    <div className="pd-pause-content">
+                      <span className="pd-pause-date">{item.date}</span>
+                      <span className="pd-pause-title">{item.title}</span>
+                      <span className="pd-pause-desc">{item.description}</span>
                     </div>
-                    <p className="pause-desc">{item.description}</p>
+                  </div>
+                );
+              }
+
+              const tier    = ctcTier(item.ctcNum);
+              const cc      = COMPANY_COLORS[item.company] || { bg: '#334155', text: '#94a3b8' };
+              const isDream = item.ctcNum >= 10;
+
+              return (
+                <div key={item.id} className="pd-drive-row">
+                  <div
+                    className={`pd-drive-card ${isDream ? 'pd-dream' : ''} ${hoveredId === item.id ? 'pd-hovered' : ''}`}
+                    style={{ '--accent': tier.color }}
+                    onMouseEnter={() => setHoveredId(item.id)}
+                    onMouseLeave={() => setHoveredId(null)}
+                  >
+                    {isDream && <div className="pd-dream-strip" />}
+
+                    <div className="pd-card-inner">
+                      {/* Left */}
+                      <div className="pd-card-left">
+                        <div
+                          className="pd-company-mono"
+                          style={{ background: cc.bg + '33', borderColor: cc.bg, color: cc.text }}
+                        >
+                          {item.company.slice(0, 3).toUpperCase()}
+                        </div>
+
+                        <div className="pd-card-info">
+                          <div className="pd-card-meta-top">
+                            <span className="pd-company-name">{item.company}</span>
+                            {isDream && (
+                              <span className="pd-dream-badge">
+                                <Zap size={9} />
+                                DREAM
+                              </span>
+                            )}
+                          </div>
+                          <h3 className="pd-role-title">{item.role}</h3>
+                          <div className="pd-card-tags">
+                            <span className="pd-tag"><Calendar size={11} />{item.date}</span>
+                            <span className="pd-tag"><MapPin size={11} />{item.venueType}</span>
+                            <span className="pd-tag"><GraduationCap size={11} />{item.branches}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Right — CTC only */}
+                      <div className="pd-card-right">
+                        <div className="pd-ctc-block">
+                          <span className="pd-ctc-value" style={{ color: tier.color }}>
+                            {item.ctc}
+                          </span>
+                          <div className="pd-ctc-bar-track">
+                            <div
+                              className="pd-ctc-bar-fill"
+                              style={{
+                                width: `${Math.min(100, (item.ctcNum / 20) * 100)}%`,
+                                background: tier.bar,
+                              }}
+                            />
+                          </div>
+                          <span className="pd-tier-label" style={{ color: tier.color }}>
+                            {tier.label}
+                          </span>
+                        </div>
+
+                        <span className="pd-apps-text">
+                          <Users size={11} />
+                          {item.applications}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               );
-            }
-
-            const isDream = item.ctcNum >= 10;
-
-            return (
-              <div
-                key={item.id}
-                className={`drive-row-card ${isDream ? 'dream-glow' : ''}`}
-              >
-                {/* Left: Company & Role */}
-                <div className="drive-main-col">
-                  <div className="drive-company-badge-row">
-                    <span className="company-logo-pill">
-                      {item.company.slice(0, 3).toUpperCase()}
-                    </span>
-                    <span className="drive-name-label">{item.driveName}</span>
-                    {isDream && <span className="dream-badge">10+ LPA DREAM</span>}
-                  </div>
-
-                  <h3 className="drive-role-title">{item.role}</h3>
-
-                  <div className="drive-meta-inline">
-                    <span className="meta-inline-item">
-                      <Calendar size={13} />
-                      {item.date}
-                    </span>
-                    <span className="meta-inline-item">
-                      <MapPin size={13} />
-                      {item.venueType}
-                    </span>
-                    <span className="meta-inline-item">
-                      <GraduationCap size={13} />
-                      {item.branches}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Right: CTC & Action */}
-                <div className="drive-action-col">
-                  <div className="drive-ctc-block">
-                    <span className="ctc-val">{item.ctc}</span>
-                    <span className="ctc-label">Annual CTC</span>
-                  </div>
-
-                  <div className="drive-status-applications">
-                    <span className={`status-pill ${item.status.toLowerCase()}`}>
-                      <span className="status-dot" />
-                      {item.status}
-                    </span>
-                    <span className="app-count-text">
-                      <Users size={12} />
-                      {item.applications}
-                    </span>
-                  </div>
-
-                  <button
-                    type="button"
-                    className="inspect-btn"
-                    onClick={() => setSelectedDrive(item)}
-                  >
-                    <span>Inspect Details</span>
-                    <ExternalLink size={13} />
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-
-          {filteredDrives.length === 0 && (
-            <div className="no-drives-card">
-              <AlertCircle size={28} className="text-muted" />
-              <p>No recruitment drives found matching your query &quot;{searchTerm}&quot;.</p>
-              <button
-                type="button"
-                className="reset-filter-btn"
-                onClick={() => {
-                  setSearchTerm('');
-                  setActiveFilter('all');
-                }}
-              >
-                Reset Filters
-              </button>
-            </div>
-          )}
+            })}
+          </div>
         </div>
 
-        {/* Detailed Drive Modal */}
-        {selectedDrive && (
-          <div
-            className="drive-modal-backdrop"
-            onClick={() => setSelectedDrive(null)}
-          >
-            <div
-              className="drive-modal-window"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="modal-header">
-                <div className="modal-header-left">
-                  <span className="modal-company-tag">{selectedDrive.company}</span>
-                  <h2 className="modal-title">{selectedDrive.role}</h2>
-                </div>
-                <button
-                  type="button"
-                  className="modal-close-btn"
-                  onClick={() => setSelectedDrive(null)}
-                  aria-label="Close details"
-                >
-                  <X size={18} />
-                </button>
-              </div>
-
-              <div className="modal-body">
-                <div className="modal-stats-strip">
-                  <div className="modal-stat">
-                    <span className="st-lbl">PACKAGE (CTC)</span>
-                    <span className="st-val highlight">{selectedDrive.ctc}</span>
-                  </div>
-                  <div className="modal-stat">
-                    <span className="st-lbl">DATE & TIME</span>
-                    <span className="st-val">{selectedDrive.date}</span>
-                  </div>
-                  <div className="modal-stat">
-                    <span className="st-lbl">ASSESSMENT FORMAT</span>
-                    <span className="st-val">{selectedDrive.venueType}</span>
-                  </div>
-                  <div className="modal-stat">
-                    <span className="st-lbl">CURRENT STATUS</span>
-                    <span className={`status-pill ${selectedDrive.status.toLowerCase()}`}>
-                      <span className="status-dot" />
-                      {selectedDrive.status}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="modal-section-block">
-                  <h4>Eligible Degree & Engineering Branches</h4>
-                  <div className="branches-tag-wrap">
-                    {selectedDrive.branches.split('/').map((b) => (
-                      <span key={b} className="branch-tag">
-                        {b.trim()}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="modal-section-block">
-                  <h4>Assessment Instructions & Protocol</h4>
-                  <p className="modal-desc-p">
-                    Verified recruitment window drive conducted in coordination with the Department of
-                    Software Engineering and Placement Cell at FET Jain University. Ensure your official
-                    college credentials and registered resume on Superset are synced before attendance.
-                  </p>
-                </div>
-              </div>
-
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="modal-action-btn primary"
-                  onClick={() => setSelectedDrive(null)}
-                >
-                  <span>Close Inspection</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
