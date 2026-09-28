@@ -54,6 +54,14 @@ const wrap = (min, max, v) => {
 export function FeatureCarousel() {
   const [step, setStep] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const currentIndex =
     ((step % FEATURES.length) + FEATURES.length) % FEATURES.length;
@@ -86,58 +94,9 @@ export function FeatureCarousel() {
 
   return (
     <div className="feature-carousel-root w-full max-w-6xl mx-auto md:p-6">
-      <div className="feature-carousel-card relative overflow-hidden rounded-[2rem] lg:rounded-[3rem] flex flex-col lg:flex-row min-h-[540px] lg:aspect-[16/8] border border-white/10 bg-[#0a0a0a]">
-        {/* Left: label rail */}
-        <div className="feature-rail w-full lg:w-[36%] min-h-[300px] lg:h-full relative z-30 flex flex-col items-start justify-center overflow-hidden px-8 lg:pl-14 bg-gradient-to-b from-[#0d1420] to-[#0a0f18]">
-          <div className="rail-fade-top absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-[#0a0f18] to-transparent z-40" />
-          <div className="rail-fade-bottom absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#0a0f18] to-transparent z-40" />
-
-          <div className="rail-track relative w-full h-full flex items-center justify-start z-20">
-            {FEATURES.map((feature, index) => {
-              const distance = index - currentIndex;
-              const wrappedDistance = wrap(
-                -(FEATURES.length / 2),
-                FEATURES.length / 2,
-                distance
-              );
-              const isActive = index === currentIndex;
-              const Icon = feature.icon;
-
-              return (
-                <motion.div
-                  key={feature.id}
-                  style={{ height: ITEM_HEIGHT, width: "fit-content" }}
-                  animate={{
-                    y: wrappedDistance * ITEM_HEIGHT,
-                    opacity: 1 - Math.abs(wrappedDistance) * 0.25,
-                  }}
-                  transition={{ type: "spring", stiffness: 90, damping: 22, mass: 1 }}
-                  className="rail-item absolute flex items-center justify-start"
-                >
-                  <button
-                    onClick={() => handleChipClick(index)}
-                    onMouseEnter={() => setIsPaused(true)}
-                    onMouseLeave={() => setIsPaused(false)}
-                    className={cn(
-                      "rail-chip relative flex items-center gap-3 px-6 py-3.5 rounded-full transition-all duration-500 text-left border font-mono",
-                      isActive
-                        ? "active bg-cyan-400 text-[#0a0f18] border-cyan-400 z-10"
-                        : "bg-transparent text-white/50 border-white/15 hover:border-white/30 hover:text-white"
-                    )}
-                  >
-                    <Icon size={16} strokeWidth={2} />
-                    <span className="text-[13px] tracking-tight whitespace-nowrap">
-                      {feature.label}
-                    </span>
-                  </button>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Right: text-only card stack */}
-        <div className="feature-stack-panel flex-1 min-h-[420px] lg:h-full relative flex items-center justify-center py-14 px-6 lg:px-14 overflow-hidden border-t lg:border-t-0 lg:border-l border-white/10 bg-[#0a0a0a]">
+      <div className="feature-carousel-card relative overflow-hidden rounded-[2rem] lg:rounded-[3rem] flex flex-col min-h-[540px] lg:aspect-[16/8] border border-white/10 bg-[#0a0a0a]">
+        {/* Card stack — full width */}
+        <div className="feature-stack-panel w-full min-h-[420px] lg:h-full relative flex items-center justify-center py-14 px-6 lg:px-14 overflow-hidden bg-[#0a0a0a]">
           {/* faint background grid texture */}
           <div
             className="stack-grid-bg absolute inset-0 opacity-[0.07] pointer-events-none"
@@ -161,27 +120,27 @@ export function FeatureCarousel() {
                   key={feature.id}
                   initial={false}
                   animate={{
-                    x: isActive ? 0 : isPrev ? -100 : isNext ? 100 : 0,
-                    scale: isActive ? 1 : isPrev || isNext ? 0.85 : 0.7,
-                    opacity: isActive ? 1 : isPrev || isNext ? 0.35 : 0,
-                    rotate: isPrev ? -4 : isNext ? 4 : 0,
+                    x: isActive ? 0 : isMobile ? 0 : isPrev ? -90 : isNext ? 90 : 0,
+                    scale: isActive ? 1 : isMobile ? 0.92 : isPrev || isNext ? 0.86 : 0.7,
+                    opacity: isActive ? 1 : isMobile ? 0 : isPrev || isNext ? 0.3 : 0,
+                    rotate: isMobile ? 0 : isPrev ? -4 : isNext ? 4 : 0,
                     zIndex: isActive ? 20 : isPrev || isNext ? 10 : 0,
                     pointerEvents: isActive ? "auto" : "none",
                   }}
                   transition={{ type: "spring", stiffness: 260, damping: 25, mass: 0.8 }}
-                  className="stack-card absolute inset-0 rounded-[1.75rem] overflow-hidden border border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent backdrop-blur-sm origin-center flex flex-col justify-between p-8"
+                  className="stack-card absolute inset-0 rounded-[1.75rem] overflow-hidden border border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent backdrop-blur-sm origin-center flex flex-col justify-between"
                 >
                   {/* ghost index number, top-right */}
-                  <span className="ghost-index-num absolute -top-4 -right-2 text-[9rem] font-black leading-none text-white/[0.04] select-none pointer-events-none">
+                  <span className="ghost-index-num absolute -top-4 -right-2 text-[8rem] font-black leading-none text-white/[0.03] select-none pointer-events-none">
                     {String(index + 1).padStart(2, "0")}
                   </span>
 
-                  {/* corner brackets for a "framed terminal" feel */}
-                  <span className="corner-bracket-tl absolute top-5 left-5 w-3 h-3 border-t border-l border-cyan-400/40" />
-                  <span className="corner-bracket-br absolute bottom-5 right-5 w-3 h-3 border-b border-r border-cyan-400/40" />
+                  {/* corner brackets for framed terminal feel - positioned in actual corners */}
+                  <span className="corner-bracket-tl" aria-hidden="true" />
+                  <span className="corner-bracket-br" aria-hidden="true" />
 
-                  <div className="relative z-10">
-                    <div className="flex items-center justify-between mb-6">
+                  <div className="relative z-10 card-content-top">
+                    <div className="card-badge-row flex items-center justify-between mb-4">
                       <div className="card-counter-badge flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-400/10 border border-cyan-400/30 text-cyan-300 text-[10px] font-mono uppercase tracking-[0.2em]">
                         <Icon size={12} strokeWidth={2} />
                         0{index + 1} / 0{FEATURES.length}
@@ -215,6 +174,21 @@ export function FeatureCarousel() {
                 </motion.div>
               );
             })}
+          </div>
+
+          {/* Interactive Navigation Dots */}
+          <div className="carousel-nav-dots" aria-label="Feature navigation">
+            {FEATURES.map((feat, idx) => (
+              <button
+                key={feat.id}
+                type="button"
+                className={`carousel-dot ${idx === currentIndex ? 'is-active' : ''}`}
+                onClick={() => handleChipClick(idx)}
+                aria-label={`Go to track ${idx + 1}: ${feat.label}`}
+              >
+                <span className="dot-fill" />
+              </button>
+            ))}
           </div>
         </div>
       </div>

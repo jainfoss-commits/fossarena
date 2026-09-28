@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
-import { Compass } from 'lucide-react';
+import { Compass, Menu, X } from 'lucide-react';
 import './Navbar.css';
 
 // Crisp SVG Icons for Instagram & LinkedIn
@@ -46,11 +46,17 @@ function LinkedinIcon({ size = 15 }) {
 
 export default function Navbar({ isVisible = true, onOpenJoinModal }) {
   const [isHovered, setIsHovered] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
+
   const handleNavClick = (e, targetId) => {
     if (e && e.preventDefault) e.preventDefault();
+    setIsMobileMenuOpen(false);
     if (location.pathname === '/') {
       const el = document.getElementById(targetId);
       if (el) {
@@ -93,7 +99,7 @@ export default function Navbar({ isVisible = true, onOpenJoinModal }) {
           </div>
         </div>
 
-        {/* Center: Navigation Links */}
+        {/* Center: Navigation Links (Desktop) */}
         <nav className="nav-center" aria-label="Main Navigation">
           <a
             href="#about"
@@ -116,7 +122,7 @@ export default function Navbar({ isVisible = true, onOpenJoinModal }) {
           </Link>
         </nav>
 
-        {/* Right: Actions Group & Explore */}
+        {/* Right: Actions Group & Explore (Desktop only) */}
         <div className="nav-right">
           <div
             className={`explore-action-group ${isHovered ? 'is-active' : ''}`}
@@ -157,6 +163,73 @@ export default function Navbar({ isVisible = true, onOpenJoinModal }) {
               <Compass size={15} className="btn-icon" />
               <span>Explore</span>
             </button>
+          </div>
+        </div>
+
+        {/* Mobile Hamburger Button (Mobile only) */}
+        <button
+          type="button"
+          className={`mobile-menu-toggle ${isMobileMenuOpen ? 'is-active' : ''}`}
+          onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+          aria-label={isMobileMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
+          aria-expanded={isMobileMenuOpen}
+        >
+          {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+        </button>
+      </div>
+
+      {/* Mobile Navigation Drawer / Dropdown */}
+      <div className={`mobile-nav-drawer ${isMobileMenuOpen ? 'drawer-open' : ''}`}>
+        <div className="mobile-nav-inner">
+          <nav className="mobile-nav-links" aria-label="Mobile Navigation">
+            <a
+              href="#about"
+              className="mobile-nav-link"
+              onClick={(e) => handleNavClick(e, 'about')}
+            >
+              <span className="mobile-nav-num">01</span>
+              <span className="mobile-nav-text">About</span>
+            </a>
+            <Link
+              to="/events"
+              className={`mobile-nav-link ${location.pathname === '/events' ? 'active-mobile-link' : ''}`}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <span className="mobile-nav-num">02</span>
+              <span className="mobile-nav-text">Events</span>
+            </Link>
+            <Link
+              to="/placements"
+              className={`mobile-nav-link ${location.pathname === '/placements' ? 'active-mobile-link' : ''}`}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <span className="mobile-nav-num">03</span>
+              <span className="mobile-nav-text">Placements</span>
+            </Link>
+          </nav>
+
+          <div className="mobile-nav-footer">
+            <span className="mobile-footer-label">Connect</span>
+            <div className="mobile-social-row">
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noreferrer"
+                className="social-icon-btn instagram-btn"
+                aria-label="Instagram"
+              >
+                <InstagramIcon size={16} />
+              </a>
+              <a
+                href="https://linkedin.com"
+                target="_blank"
+                rel="noreferrer"
+                className="social-icon-btn linkedin-btn"
+                aria-label="LinkedIn"
+              >
+                <LinkedinIcon size={16} />
+              </a>
+            </div>
           </div>
         </div>
       </div>

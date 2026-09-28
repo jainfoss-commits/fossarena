@@ -35,23 +35,6 @@ export default function AboutSection() {
               <span className="text-highlight-subtle">ship to real users</span>.
             </p>
           </div>
-
-          <div className="about-editorial-meta">
-            <div className="meta-col">
-              <span className="meta-label">CODEBASE</span>
-              <span className="meta-value">100% Libre Code</span>
-            </div>
-            <div className="meta-sep" />
-            <div className="meta-col">
-              <span className="meta-label">POLICY</span>
-              <span className="meta-value">Zero Gatekeeping</span>
-            </div>
-            <div className="meta-sep" />
-            <div className="meta-col">
-              <span className="meta-label">WORKFLOW</span>
-              <span className="meta-value">Upstream PRs First</span>
-            </div>
-          </div>
         </div>
 
         {/* Right Column: Terminal Block */}

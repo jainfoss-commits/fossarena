@@ -201,6 +201,23 @@
   color: var(--lead-accent, #38bdf8);
 }
 
+.avatar-initials-text {
+  font-family: var(--font-display, 'Space Grotesk', system-ui, sans-serif);
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--lead-accent, #38bdf8);
+  text-shadow: 0 0 16px var(--lead-accent, rgba(56, 189, 248, 0.45));
+  line-height: 1;
+  user-select: none;
+  transition: transform 0.3s ease, text-shadow 0.3s ease;
+}
+
+.lead-card:hover .avatar-initials-text {
+  transform: scale(1.08);
+  text-shadow: 0 0 24px var(--lead-accent, rgba(56, 189, 248, 0.7));
+}
+
 .avatar-code-snippet {
   font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 10px;
