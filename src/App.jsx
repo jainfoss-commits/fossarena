@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useLocation, useNavigate, Link } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import ThreeMotionCanvas from './components/ThreeMotionCanvas';
 import ParticleLoader, { hasLoaderRun } from './components/ParticleLoader';
-import FossGlobe from './components/FossGlobe';
+import AsciiGridBackground from './components/AsciiGridBackground';
+import CustomCursor from './components/CustomCursor';
 import SmoothTextWriter from './components/SmoothTextWriter';
 import AboutSection from './components/AboutSection';
 import TeamSection from './components/TeamSection';
 import PlacementsDirectory from './components/PlacementsDirectory';
 import EventsPage from './pages/EventsPage';
+import AboutPage from './pages/AboutPage';
 import GlassCardDemo from './components/ui/demo';
 import {
-  ArrowRight,
-  Terminal,
-  Users,
   X,
   Send,
   CheckCircle2,
@@ -46,30 +44,20 @@ function HomePage({ isSiteLoaded, onOpeningComplete, isJoinModalOpen, setIsJoinM
 
   return (
     <div className={`app-motion-layout ${heroReady ? 'page-ready' : 'page-loading'}`}>
-      {/* Particle Loader overlay — only on hard reload */}
+      {/* Particle Loader overlay: only on hard reload */}
       {!loaderDone && <ParticleLoader onComplete={handleLoaderComplete} />}
-
-      {/* Persistent Interactive 3D Background Canvas */}
-      <ThreeMotionCanvas onOpeningComplete={loaderDone ? onOpeningComplete : undefined} />
-      <div className={`hero-depth-vignette ${heroReady ? 'elem-fade-in' : 'elem-hidden'}`} />
-
-      {/* 3D Holographic Globe (transitions from Hero side to About orbital horizon) */}
-      <FossGlobe />
 
       {/* ─── Hero ─── */}
       <section className="motion-hero-section" id="hero">
         <div className="hero-content-wrapper hero-centered-wrapper">
           <div className={`hero-centered-content ${heroReady ? 'hero-ready-in' : 'hero-waiting'}`}>
             <div className="hero-center-stage">
-              {/* Centered 3D Holographic Globe Anchor */}
-              <div className="hero-globe-anchor-placeholder" id="hero-globe-anchor" />
-
               {/* Centered Club Name & Tagline Overlay in middle of whole page */}
               <div className="hero-title-overlay">
                 <SmoothTextWriter shouldStart={heroReady} />
               </div>
 
-              {/* Single Current Event Button positioned just below the globe */}
+              {/* Single Current Event Button positioned in middle below name */}
               <div className="hero-motion-actions">
                 <Link to="/events" className="chroma-pill-btn" aria-label="Current Event">
                   <span className="chroma-pill-label">Current Event</span>
@@ -183,19 +171,30 @@ export default function App() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // On hard reload redirect to '/' so loader + hero always play first
-  useEffect(() => {
-    const navEntry = performance.getEntriesByType('navigation')[0];
-    const navType  = navEntry?.type;
-    if ((navType === 'reload' || navType === 'navigate') && location.pathname !== '/') {
-      navigate('/', { replace: true });
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const isNavbarVisible = true;
 
-  const isNavbarVisible = (isSiteLoaded || location.pathname !== '/') && location.pathname !== '/events';
+  // Prevent browser from restoring old scroll positions
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+  }, []);
+
+  // Guarantee every section/page opens from the very top
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, [location.pathname]);
 
   return (
     <div className="app-root-shell">
+      {/* Gliding Custom Neon Cyber Cursor */}
+      <CustomCursor />
+
+      {/* Full-Website Interactive ASCII Matrix Background */}
+      <AsciiGridBackground />
+
       <Navbar isVisible={isNavbarVisible} onOpenJoinModal={() => setIsJoinModalOpen(true)} />
       <Routes>
         <Route path="/" element={
@@ -207,6 +206,7 @@ export default function App() {
           />
         } />
         <Route path="/events" element={<EventsPage />} />
+        <Route path="/about" element={<AboutPage />} />
         <Route path="/placements" element={<PlacementsDirectory onBackToHome={() => navigate('/')} />} />
         <Route path="/demo" element={<GlassCardDemo />} />
       </Routes>

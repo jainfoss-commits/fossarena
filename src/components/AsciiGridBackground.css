@@ -1,0 +1,40 @@
+.ascii-grid-root {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  background-color: #06080d;
+  overflow: hidden;
+  user-select: none;
+  /* Hardware compositor isolation */
+  transform: translateZ(0);
+  contain: strict;
+}
+
+.ascii-grid-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  /* Keep canvas painting completely isolated from page layout */
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Atmospheric radial vignette preserving high foreground typography readability */
+.ascii-grid-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at 50% 45%,
+    rgba(6, 8, 13, 0.35) 0%,
+    rgba(6, 8, 13, 0.7) 60%,
+    rgba(6, 8, 13, 0.94) 100%
+  );
+  transform: translateZ(0);
+}

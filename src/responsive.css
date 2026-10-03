@@ -1,5 +1,5 @@
 /* ==========================================================================
-   FOSS CLUB — Global Responsive Overrides
+   FOSS CLUB - Global Responsive Overrides
    Breakpoints: 1024px (tablet), 768px (mobile landscape), 480px (mobile)
    ========================================================================== */
 
@@ -9,7 +9,7 @@
     padding: 12px 18px;
   }
 
-  /* Hide center nav links on mobile — brand + hamburger toggle only */
+  /* Hide center nav links on mobile: brand + hamburger toggle only */
   .nav-center {
     display: none !important;
   }
@@ -500,7 +500,7 @@
   }
 }
 
-/* ─── Touch targets — 44px min for tappable elements ─────────────────────── */
+/* ─── Touch targets: 44px min for tappable elements ─────────────────────── */
 @media (max-width: 768px) {
   .nav-link,
   .motion-btn,

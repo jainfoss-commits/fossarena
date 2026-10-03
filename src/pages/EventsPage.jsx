@@ -33,6 +33,12 @@ export default function EventsPage() {
   const [rsvpEmail, setRsvpEmail] = useState('');
   const [rsvpSubmitted, setRsvpSubmitted] = useState(false);
 
+  // Guarantee page starts from the very top on open
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+  }, []);
+
   // Drag interaction states
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartX, setDragStartX] = useState(0);
@@ -272,18 +278,7 @@ export default function EventsPage() {
       onMouseUp={handleMouseUp}
       onTouchEnd={handleMouseUp}
     >
-      {/* ─── Top Brand & Navigation Bar ───────────────────────────────────── */}
-      <header className="brandhub-top-bar">
-        <Link to="/" className="brandhub-brand-name">
-          FOSSCLUB
-        </Link>
-
-
-        {/* Home / Back on Far Right */}
-        <Link to="/" className="brandhub-contact-link">
-          HOME
-        </Link>
-      </header>
+      {/* Global floating Navbar is mounted at root shell */}
 
       {/* ─── Middle Card Showcase Track ────────────────────────────────────── */}
       <main

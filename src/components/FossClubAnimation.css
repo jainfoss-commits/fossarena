@@ -1,4 +1,4 @@
-/* FossClubAnimation.css — Retro-Futuristic Typography (Clean, Solid, No Hover) */
+/* FossClubAnimation.css: Retro-Futuristic Typography (Clean, Solid, No Hover) */
 
 .cyber-graffiti-stage {
   position: relative;
@@ -59,7 +59,7 @@
   pointer-events: none;
 }
 
-/* Character hit area — static, no pointer/hover effects */
+/* Character hit area: static, no pointer/hover effects */
 .graffiti-char-wrapper {
   display: inline-block;
   position: relative;

@@ -3,7 +3,7 @@ import { gsap } from 'gsap';
 import './FossClubAnimation.css';
 
 /**
- * FossClubAnimation — Editorial Split Typography
+ * FossClubAnimation: Editorial Split Typography
  * - FOSS (outlined/stroke) + CLUB (gradient fill) side by side on one line
  * - Word-clip slide-up reveal on load (modern editorial motion)
  * - Shimmer scan line sweeps across after reveal
@@ -39,7 +39,7 @@ export default function FossClubAnimation({
         return;
       }
 
-      // Fade-up entrance (no clip needed — clean and works with overflow:visible)
+      // Fade-up entrance (no clip needed: clean and works with overflow:visible)
       gsap.set(chars, { y: 40, opacity: 0 });
       gsap.set(dividerRef.current, { opacity: 0, scaleY: 0, transformOrigin: 'bottom center' });
 

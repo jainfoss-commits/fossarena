@@ -1,11 +1,6 @@
 /* ==========================================================================
-   FOSS CLUB — Clean Editorial About Stylesheet
-   Features:
-     - 100% Transparent background allowing 3D globe horizon to shine
-     - Architectural separation lines framing the section and dividing items
-     - Clean typographic title: "About."
-     - Narrative statement directly below the title
-     - Clean editorial cells WITHOUT card boxes / divs / rounded borders
+   FOSS CLUB: Original Editorial About Stylesheet
+   Enhanced for Maximum Text Visibility & Pixelated Matrix Harmony
    ========================================================================== */
 
 .about-editorial-section {
@@ -13,15 +8,23 @@
   width: 100%;
   background: transparent !important;
   color: #ede8de;
-  padding: 90px 24px 100px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 100px 24px 100px;
+  border: none;
   box-sizing: border-box;
   z-index: 10;
-  scroll-margin-top: 80px;
+  scroll-margin-top: 92px;
+  overflow: hidden;
+  cursor: default;
 }
 
-/* ── Container with Architectural Framing Lines ─────────────────────────── */
+.about-editorial-container,
+.about-editorial-header,
+.about-narrative-block,
+.about-editorial-grid {
+  cursor: default;
+}
+
+/* ── Container with Precision Architectural Framing ─────────────────────── */
 .about-editorial-container {
   max-width: 1240px;
   width: 100%;
@@ -30,19 +33,58 @@
   flex-direction: column;
   position: relative;
   z-index: 10;
-  padding: 0 40px;
-  border-left: 1px solid rgba(255, 255, 255, 0.08);
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0 44px;
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
   box-sizing: border-box;
 }
 
-/* ── Title Header with Separation Line ───────────────────────────────────── */
+/* Precision Corner Reticles */
+.about-corner-bracket {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  z-index: 12;
+}
+
+.about-corner-bracket.top-left {
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid #38bdf8;
+  border-left: 2px solid #38bdf8;
+}
+
+.about-corner-bracket.top-right {
+  top: -1px;
+  right: -1px;
+  border-top: 2px solid #38bdf8;
+  border-right: 2px solid #38bdf8;
+}
+
+.about-corner-bracket.bottom-left {
+  bottom: -1px;
+  left: -1px;
+  border-bottom: 2px solid #38bdf8;
+  border-left: 2px solid #38bdf8;
+}
+
+.about-corner-bracket.bottom-right {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 2px solid #38bdf8;
+  border-right: 2px solid #38bdf8;
+}
+
+/* ── Title Header & Telemetry Strip ─────────────────────────────────────── */
 .about-editorial-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
   padding-bottom: 28px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 20px;
 }
 
 .about-editorial-title {
@@ -53,45 +95,49 @@
   line-height: 1.05;
   color: #ffffff;
   margin: 0;
+  text-shadow: 0 4px 28px rgba(0, 0, 0, 0.95);
 }
 
 .about-title-accent {
   color: #38bdf8;
+  text-shadow: 0 0 24px rgba(56, 189, 248, 0.85);
 }
 
-/* ── Narrative Details Directly Below About with Separation Line ─────────── */
+
+
+/* ── Narrative Details with Maximum Text Visibility ─────────────────────── */
 .about-narrative-block {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
   max-width: 980px;
-  padding: 36px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 40px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .about-lead-statement {
   font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: clamp(19px, 2vw, 25px);
+  font-size: clamp(20px, 2.1vw, 26px);
   font-weight: 500;
-  line-height: 1.52;
-  color: #f1f5f9;
+  line-height: 1.55;
+  color: #ffffff;
   letter-spacing: -0.015em;
   margin: 0;
-  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.75);
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.95);
 }
 
 .about-body-statement {
   font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: clamp(14.5px, 1.15vw, 16.5px);
-  font-weight: 350;
-  line-height: 1.82;
-  color: rgba(226, 232, 240, 0.76);
+  font-size: clamp(15px, 1.2vw, 17px);
+  font-weight: 400;
+  line-height: 1.84;
+  color: #e2e8f0;
   letter-spacing: -0.005em;
   margin: 0;
-  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.95);
 }
 
-/* ── Clean Editorial Grid: Pure Typography & Separation Lines (No Div Boxes) ─ */
+/* ── Clean Editorial Grid with Translucent Glass Backing ─────────────────── */
 .about-editorial-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -104,66 +150,92 @@
 .about-editorial-cell {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 36px 40px;
-  background: transparent !important;
+  gap: 10px;
+  padding: 40px 42px;
+  background: rgba(8, 12, 22, 0.55) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: none !important;
-  border-radius: 0 !important;
+  border-radius: 4px !important;
   box-shadow: none !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
   box-sizing: border-box;
-  transition: color 0.2s ease;
+  transition: background-color 0.28s ease, box-shadow 0.28s ease, transform 0.28s ease;
+  position: relative;
 }
 
-/* Add vertical separation line between the two columns */
+.about-editorial-cell:hover {
+  background: rgba(15, 23, 42, 0.85) !important;
+  box-shadow: inset 0 1px 0 0 rgba(56, 189, 248, 0.4), 0 12px 36px rgba(0, 0, 0, 0.5) !important;
+  transform: translateY(-2px);
+}
+
 .about-editorial-cell:nth-child(odd) {
-  border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
-  padding-left: 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
+  padding-left: 20px;
 }
 
 .about-editorial-cell:nth-child(even) {
-  padding-right: 0;
+  padding-right: 20px;
 }
 
-/* Remove bottom border on the last two items */
 .about-editorial-cell:nth-last-child(-n+2) {
   border-bottom: none !important;
 }
 
+.about-cell-tag-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.about-cell-pip {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.9);
+  flex-shrink: 0;
+}
+
 .about-editorial-tag {
-  font-family: var(--font-mono, monospace);
-  font-size: 11px;
-  font-weight: 600;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 11.5px;
+  font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #38bdf8;
-  margin-bottom: 2px;
-  display: block;
+  display: inline-block;
 }
 
+/* Heading: Pure White, Maximum Visibility */
 .about-editorial-heading {
   font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: 18.5px;
-  font-weight: 600;
+  font-size: 21px;
+  font-weight: 700;
   line-height: 1.32;
   color: #ffffff;
   margin: 0;
-  letter-spacing: -0.012em;
+  letter-spacing: -0.015em;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9);
 }
 
+/* Descriptions: High Contrast Slate-300 */
 .about-editorial-desc {
   font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: 13.5px;
-  line-height: 1.65;
-  color: rgba(226, 232, 240, 0.65);
+  font-size: 14.5px;
+  line-height: 1.72;
+  color: #cbd5e1;
   margin: 0;
-  font-weight: 350;
+  font-weight: 400;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
 }
 
 /* ── Responsive Rules ────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
   .about-editorial-section {
-    padding: 60px 16px;
+    padding: 70px 16px 80px;
   }
 
   .about-editorial-container {
@@ -172,16 +244,26 @@
     border-right: none;
   }
 
+  .about-corner-bracket {
+    display: none;
+  }
+
+  .about-editorial-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
   .about-editorial-grid {
     grid-template-columns: 1fr;
   }
 
   .about-editorial-cell {
-    padding: 24px 0 !important;
+    padding: 24px 12px !important;
     border-right: none !important;
   }
 
   .about-editorial-cell:nth-last-child(2) {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
   }
 }

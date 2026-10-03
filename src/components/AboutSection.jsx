@@ -32,15 +32,22 @@ export default function AboutSection() {
   return (
     <section id="about" className="about-editorial-section">
       <div className="about-editorial-container">
+        {/* Precision Architectural Framing Markers */}
+        <span className="about-corner-bracket top-left" aria-hidden="true" />
+        <span className="about-corner-bracket top-right" aria-hidden="true" />
+        <span className="about-corner-bracket bottom-left" aria-hidden="true" />
+        <span className="about-corner-bracket bottom-right" aria-hidden="true" />
 
         {/* ── Title Header ── */}
         <div className="about-editorial-header">
-          <h2 className="about-editorial-title">
-            About<span className="about-title-accent">.</span>
-          </h2>
+          <div className="about-header-main">
+            <h2 className="about-editorial-title">
+              About<span className="about-title-accent">.</span>
+            </h2>
+          </div>
         </div>
 
-        {/* ── Narrative Details Directly Below About ── */}
+        {/* ── Narrative Statement Directly Below Header ── */}
         <div className="about-narrative-block">
           <p className="about-lead-statement">
             FOSS is a community where students come together to learn, build, and contribute to open-source projects.
@@ -50,11 +57,14 @@ export default function AboutSection() {
           </p>
         </div>
 
-        {/* ── Clean Editorial Grid (No Box Divs, Pure Typography & Separation Lines) ── */}
+        {/* ── Clean Architectural Editorial Grid ── */}
         <div className="about-editorial-grid">
           {PILLARS.map((item) => (
             <div key={item.id} className="about-editorial-cell">
-              <span className="about-editorial-tag">{item.tag}</span>
+              <div className="about-cell-tag-row">
+                <span className="about-cell-pip" />
+                <span className="about-editorial-tag">{item.tag}</span>
+              </div>
               <h3 className="about-editorial-heading">{item.title}</h3>
               <p className="about-editorial-desc">{item.summary}</p>
             </div>

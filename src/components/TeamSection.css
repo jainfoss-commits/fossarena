@@ -5,10 +5,14 @@
 
 .team-motion-section {
   position: relative;
-  padding: 4.5rem 1.5rem 2.5rem;
+  padding: 4.5rem 1.5rem 3rem;
   background: transparent;
-  overflow: hidden;
-  scroll-margin-top: 80px;
+  overflow-x: clip;
+  overflow-y: visible;
+  scroll-margin-top: 92px;
+  /* Optimize rendering when scrolling into the section */
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 750px;
 }
 
 /* ── Section Header ──────────────────────────────────────────────────────── */
@@ -71,6 +75,8 @@
   gap: 1.75rem;
   max-width: 1320px;
   margin: 0 auto;
+  overflow: visible;
+  padding: 12px 6px;
 }
 
 /* ── Lead Card ───────────────────────────────────────────────────────────── */

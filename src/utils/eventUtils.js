@@ -19,7 +19,7 @@ export const DEFAULT_EVENTS = [
   {
     id: "event-vibe-coding-workshop-sep2026",
     title: "FOSS CLUB PRESENTS: VIBE CODING WORKSHOP",
-    description: "What if you could take an idea in your head and actually turn it into something that works? Join our Vibe Coding Workshop and learn to use AI-powered coding to build, experiment, and bring your ideas to life — without getting stuck in endless tutorials. Whether you're a beginner or already into coding, come and experience a different way of building projects. A 4-week comprehensive hands-on Student Development Program (SDP) to master full-stack development and build real-world applications.",
+    description: "What if you could take an idea in your head and actually turn it into something that works? Join our Vibe Coding Workshop and learn to use AI-powered coding to build, experiment, and bring your ideas to life, without getting stuck in endless tutorials. Whether you're a beginner or already into coding, come and experience a different way of building projects. A 4-week comprehensive hands-on Student Development Program (SDP) to master full-stack development and build real-world applications.",
     image_url: "/events/vibe-coding-poster.jpg",
     date: "2026-09-26",
     end_date: "2026-10-24",
@@ -38,7 +38,7 @@ export const DEFAULT_EVENTS = [
     register_url: "#register",
     objectives: [
       "Master Vibe Coding: Transform mental concepts directly into functioning web software with AI-assisted workflows.",
-      "Learn full-stack architectures without endless tutorial paralysis — from data persistence to production deployment.",
+      "Learn full-stack architectures without endless tutorial paralysis: from data persistence to production deployment.",
       "Week 1: Vibe Coding Fundamentals (Database, Frontend, Backend & AI Tools with 1-hour live showcase).",
       "Week 2: Backend Development (GitHub, MCP, APIs & Cloud Hosting).",
       "Week 3: Deployment & Real Projects (Netlify & Vercel, Final Project Development).",
@@ -136,7 +136,7 @@ export const DEFAULT_EVENTS = [
   {
     id: "event-fullstack-week4-react-mar2026",
     title: "Full-Stack Workshop 2026 – Week 4: Frontend Development with React.js",
-    description: "Week Four transitioned participants into modern Single Page Application (SPA) development using React.js—the industry-standard declarative UI library. Students explored why component-driven architecture replaced monolithic DOM scripts and learned to build reactive, modular interfaces.",
+    description: "Week Four transitioned participants into modern Single Page Application (SPA) development using React.js: the industry-standard declarative UI library. Students explored why component-driven architecture replaced monolithic DOM scripts and learned to build reactive, modular interfaces.",
     image_url: "/events/16_Fullstack_Week4_React_Mar2026/photo_02.jpeg",
     date: "2026-03-07",
     end_date: "2026-04-30",

@@ -147,7 +147,7 @@ export const eventsData = [
 export const aboutSection = {
   heading: "About FOSS Club",
   mission:
-    "We're the open-source community under Software Engineering at Jain University. No syllabus, no tutorials-only mindset — you learn by opening a terminal, cloning a repo, and getting your hands dirty on things that ship to real users.",
+    "We're the open-source community under Software Engineering at Jain University. No syllabus, no tutorials-only mindset: you learn by opening a terminal, cloning a repo, and getting your hands dirty on things that ship to real users.",
   terminal: {
     filename: "philosophy.txt",
     command: "cat /etc/foss/philosophy.txt",
@@ -158,7 +158,7 @@ export const aboutSection = {
     {
       icon: "Terminal",
       title: "Learn by Shipping",
-      body: "Workshops and teardowns built around real, running code — not slides. You leave every session having broken and fixed something yourself.",
+      body: "Workshops and teardowns built around real, running code, not slides. You leave every session having broken and fixed something yourself.",
       footer: "12 sessions/yr",
     },
     {
@@ -176,7 +176,7 @@ export const aboutSection = {
     {
       icon: "Compass",
       title: "Mentorship, Not Hierarchy",
-      body: "Seniors don't gatekeep — they pair. Every track (Linux/Systems, Web/WASM, AI, Security) has someone one step ahead willing to walk it with you.",
+      body: "Seniors don't gatekeep: they pair. Every track (Linux/Systems, Web/WASM, AI, Security) has someone one step ahead willing to walk it with you.",
       footer: "4 active tracks",
     },
   ],

@@ -47,10 +47,16 @@ body {
 }
 
 /* Base App Layout */
+.app-root-shell {
+  position: relative;
+  min-height: 100vh;
+  background-color: #08090e;
+}
+
 .app-motion-layout {
   min-height: 100vh;
   position: relative;
-  background-color: var(--bg-deep);
+  background-color: transparent !important;
 }
 
 /* ─── Hero Section ───────────────────────────────────────────────────────── */
@@ -67,14 +73,6 @@ body {
   margin: 0;
   background: transparent;
   z-index: 2;
-}
-
-.hero-depth-vignette {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(circle at 50% 50%, transparent 35%, rgba(5, 7, 12, 0.55) 75%, rgba(5, 7, 12, 0.88) 100%);
-  z-index: 1;
 }
 
 .hero-content-wrapper {
@@ -176,9 +174,7 @@ body {
   width: 100%;
 }
 
-.hero-ecosystem-column .community-ball-wrapper,
-.hero-ecosystem-column .foss-globe-wrapper,
-.hero-ecosystem-column .hero-globe-anchor-placeholder {
+.hero-ecosystem-column .community-ball-wrapper {
   background: transparent;
   border: none;
   box-shadow: none;
@@ -208,7 +204,7 @@ body {
   }
 }
 
-/* Action Buttons — placed just below the globe */
+/* Action Buttons: placed in the middle below the name */
 .hero-motion-actions {
   position: absolute;
   top: calc(50% + 185px);

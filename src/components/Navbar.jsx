@@ -88,10 +88,11 @@ export default function Navbar({ isVisible = true, onOpenJoinModal }) {
           title="FOSS Club Home"
         >
           <img
-            src="/foss-logo.png"
+            src="/foss-logo-transparent.png"
             alt="FOSS Club Logo"
             className="brand-logo"
             draggable="false"
+            onError={(e) => { e.currentTarget.src = '/foss-logo.png'; }}
           />
           <div className="brand-name-stack">
             <span className="brand-foss">Foss</span>
@@ -101,13 +102,15 @@ export default function Navbar({ isVisible = true, onOpenJoinModal }) {
 
         {/* Center: Navigation Links (Desktop) */}
         <nav className="nav-center" aria-label="Main Navigation">
-          <a
-            href="#about"
-            className="nav-link"
-            onClick={(e) => handleNavClick(e, 'about')}
+          <Link
+            to="/"
+            className={`nav-link ${location.pathname === '/' || location.pathname === '/about' ? 'active-nav-link' : ''}`}
+            onClick={(e) => {
+              handleNavClick(e, 'hero');
+            }}
           >
             About
-          </a>
+          </Link>
           <Link
             to="/events"
             className={`nav-link ${location.pathname === '/events' ? 'active-nav-link' : ''}`}
@@ -182,14 +185,16 @@ export default function Navbar({ isVisible = true, onOpenJoinModal }) {
       <div className={`mobile-nav-drawer ${isMobileMenuOpen ? 'drawer-open' : ''}`}>
         <div className="mobile-nav-inner">
           <nav className="mobile-nav-links" aria-label="Mobile Navigation">
-            <a
-              href="#about"
-              className="mobile-nav-link"
-              onClick={(e) => handleNavClick(e, 'about')}
+            <Link
+              to="/"
+              className={`mobile-nav-link ${location.pathname === '/' || location.pathname === '/about' ? 'active-mobile-link' : ''}`}
+              onClick={(e) => {
+                handleNavClick(e, 'hero');
+              }}
             >
               <span className="mobile-nav-num">01</span>
               <span className="mobile-nav-text">About</span>
-            </a>
+            </Link>
             <Link
               to="/events"
               className={`mobile-nav-link ${location.pathname === '/events' ? 'active-mobile-link' : ''}`}

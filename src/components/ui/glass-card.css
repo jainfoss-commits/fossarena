@@ -1,6 +1,6 @@
 /* ==========================================================================
-   FOSS ARENA - 3D Glassmorphic Card Styles (Colorful Edition)
-   Each card uses --card-accent for unique colorful theming
+   FOSS ARENA - High Performance 3D Glassmorphic Card Styles
+   Refined luxury elevation shadows with zero muddy blur or harsh bloom
    ========================================================================== */
 
 .glass-card-container {
@@ -12,6 +12,7 @@
   position: relative;
   margin: 0 auto;
   box-sizing: border-box;
+  overflow: visible;
 }
 
 .glass-card-inner {
@@ -19,61 +20,63 @@
   width: 100%;
   height: 100%;
   border-radius: 46px;
-  /* Colorful gradient tint: dark base with accent color bleeding in */
+  /* Premium dark obsidian glass base */
   background:
     linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--card-accent, #38bdf8) 12%, #18181b) 0%,
-      #09090b 60%,
-      color-mix(in srgb, var(--card-accent, #38bdf8) 8%, #0a0a0a) 100%
+      145deg,
+      rgba(20, 26, 38, 0.92) 0%,
+      rgba(10, 14, 22, 0.96) 60%,
+      rgba(6, 8, 14, 0.99) 100%
     );
-  border: 1px solid color-mix(in srgb, var(--card-accent, #38bdf8) 25%, transparent);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  /* Crisp, balanced multi-stop elevation shadow */
   box-shadow:
-    0 25px 50px -12px rgba(0, 0, 0, 0.7),
-    0 0 40px -15px var(--card-accent, #38bdf8);
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.5s ease,
-              border-color 0.4s ease;
+    0 2px 4px rgba(0, 0, 0, 0.35),
+    0 10px 24px -4px rgba(0, 0, 0, 0.55),
+    0 24px 44px -12px rgba(0, 0, 0, 0.7);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.35s ease;
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
   overflow: hidden;
   box-sizing: border-box;
+  transform: translateZ(0);
 }
 
 .glass-card-container:hover .glass-card-inner {
-  transform: rotate3d(1, 1, 0, 22deg);
-  border-color: color-mix(in srgb, var(--card-accent, #38bdf8) 55%, transparent);
+  transform: rotate3d(1, 1, 0, 15deg) translateY(-5px);
+  border-color: color-mix(in srgb, var(--card-accent, #38bdf8) 45%, rgba(255, 255, 255, 0.2));
+  /* Smooth, deep atmospheric elevation with subtle edge highlight (no messy bloom) */
   box-shadow:
-    rgba(0, 0, 0, 0.35) 25px 45px 30px -30px,
-    0 0 60px -10px var(--card-accent, #38bdf8),
-    0 0 20px -5px color-mix(in srgb, var(--card-accent, #38bdf8) 40%, transparent);
+    0 4px 8px rgba(0, 0, 0, 0.4),
+    0 16px 36px -6px rgba(0, 0, 0, 0.65),
+    0 36px 64px -12px rgba(0, 0, 0, 0.85),
+    0 0 16px -4px color-mix(in srgb, var(--card-accent, #38bdf8) 35%, transparent),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.14);
 }
 
-/* Frosted Glass Layer with accent tint */
+/* Frosted Glass Layer */
 .glass-frosted-backdrop {
   position: absolute;
   inset: 8px;
   border-radius: 40px;
-  border-bottom: 1px solid color-mix(in srgb, var(--card-accent, #38bdf8) 20%, rgba(255,255,255,0.15));
-  border-left: 1px solid color-mix(in srgb, var(--card-accent, #38bdf8) 20%, rgba(255,255,255,0.15));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
   background: linear-gradient(
     180deg,
-    color-mix(in srgb, var(--card-accent, #38bdf8) 15%, rgba(255,255,255,0.18)) 0%,
-    rgba(255, 255, 255, 0.04) 100%
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.005) 100%
   );
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  transform-style: preserve-3d;
-  transform: translate3d(0, 0, 25px);
+  transform: translate3d(0, 0, 18px);
   pointer-events: none;
 }
 
-/* 3D Concentric Circle Rings – accent-tinted */
+/* 3D Concentric Circle Rings */
 .glass-rings-cluster {
   position: absolute;
   top: 0;
   right: 0;
-  transform-style: preserve-3d;
   pointer-events: none;
 }
 
@@ -81,19 +84,18 @@
   position: absolute;
   aspect-ratio: 1 / 1;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--card-accent, #38bdf8) 12%, rgba(255,255,255,0.06));
-  box-shadow: -10px 10px 20px 0px rgba(0, 0, 0, 0.2);
-  transition: all 0.5s ease-in-out;
-  border: 1px solid color-mix(in srgb, var(--card-accent, #38bdf8) 15%, rgba(255,255,255,0.06));
+  background: color-mix(in srgb, var(--card-accent, #38bdf8) 6%, rgba(255, 255, 255, 0.02));
+  border: 1px solid color-mix(in srgb, var(--card-accent, #38bdf8) 12%, rgba(255, 255, 255, 0.05));
+  pointer-events: none;
 }
 
-/* Central Initials Circle Icon in Top-Right – accent border ring */
+/* Central Initials Circle Icon in Top-Right */
 .glass-initials-badge {
   position: absolute;
   top: 24px;
   right: 24px;
-  width: 52px;
-  height: 52px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   background: #ffffff;
   color: var(--card-accent, #38bdf8);
@@ -101,27 +103,27 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow:
-    -8px 10px 20px 0px rgba(0, 0, 0, 0.35),
-    0 0 18px -4px var(--card-accent, #38bdf8);
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  transform: translate3d(0, 0, 85px);
+  /* Clean, crisp drop shadow without harsh fluorescent burn */
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate3d(0, 0, 48px);
   z-index: 30;
   user-select: none;
   border: 2px solid var(--card-accent, #38bdf8);
 }
 
 .glass-card-container:hover .glass-initials-badge {
-  transform: translate3d(0, 0, 110px) scale(1.08);
+  transform: translate3d(0, 0, 68px) scale(1.05);
   box-shadow:
-    -8px 14px 24px 0px rgba(0, 0, 0, 0.4),
-    0 0 28px -3px var(--card-accent, #38bdf8);
+    0 8px 22px rgba(0, 0, 0, 0.45),
+    0 0 12px -2px color-mix(in srgb, var(--card-accent, #38bdf8) 40%, transparent);
 }
 
 .glass-initials-text {
   font-family: var(--font-heading, 'Space Grotesk', system-ui, sans-serif);
   font-weight: 900;
-  font-size: 19px;
+  font-size: 18px;
   color: var(--card-accent, #38bdf8);
   line-height: 1;
   letter-spacing: -0.02em;
@@ -143,8 +145,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transform: translate3d(0, 0, 28px);
-  transform-style: preserve-3d;
+  transform: translate3d(0, 0, 22px);
   box-sizing: border-box;
   z-index: 20;
 }
@@ -154,7 +155,7 @@
   flex-direction: column;
 }
 
-/* Title – accent-colored name */
+/* Title */
 .glass-title-text {
   display: block;
   font-family: var(--font-heading, 'Space Grotesk', system-ui, sans-serif);
@@ -165,7 +166,6 @@
   line-height: 1.25;
   margin-bottom: 0.75rem;
   word-break: break-word;
-  text-shadow: 0 0 20px color-mix(in srgb, var(--card-accent, #38bdf8) 30%, transparent);
 }
 
 /* Description */
@@ -183,14 +183,13 @@
   white-space: pre-line;
 }
 
-/* Footer Row: bottom-right corner */
+/* Footer Row */
 .glass-footer-row {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
   width: 100%;
-  transform-style: preserve-3d;
   box-sizing: border-box;
   margin-top: auto;
 }
@@ -201,10 +200,9 @@
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
-  transform-style: preserve-3d;
 }
 
-/* Social Buttons – accent-colored hover */
+/* Social Buttons */
 .glass-social-btn {
   display: inline-flex;
   align-items: center;
@@ -218,22 +216,24 @@
   color: #000000;
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  transform-style: preserve-3d;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.22s ease,
+              background-color 0.22s ease;
   text-decoration: none;
 }
 
 .glass-card-container:hover .glass-social-btn {
-  transform: translate3d(0, 0, 45px);
-  box-shadow: -4px 14px 12px 0px rgba(0, 0, 0, 0.35);
+  transform: translate3d(0, 0, 28px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
 }
 
 .glass-social-btn:hover {
   background: var(--card-accent, #38bdf8);
   color: #ffffff;
   border: none;
-  box-shadow: 0 0 16px color-mix(in srgb, var(--card-accent, #38bdf8) 60%, transparent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--card-accent, #38bdf8) 50%, transparent);
+  transform: translate3d(0, 0, 36px) scale(1.08);
 }
 
 .glass-social-btn:active {

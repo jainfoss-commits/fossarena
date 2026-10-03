@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
 /**
- * Minimal Loading Screen — no canvas, no particles.
- * Just a dark background with animated "[ LOADING — XX% ]" text.
+ * Minimal Loading Screen: no canvas, no particles.
+ * Just a dark background with animated "[ LOADING: XX% ]" text.
  *
  * Module-level flag (resets on hard reload, persists through SPA nav):
  *   - false  → show loader
@@ -49,7 +49,7 @@ export default function ParticleLoader({ onComplete }) {
 
   return (
     <div className={`pl-root${done ? ' pl-exit' : ''}`}>
-      <span className="pl-label">[ LOADING — {pct}% ]</span>
+      <span className="pl-label">[ LOADING // {pct}% ]</span>
     </div>
   );
 }
